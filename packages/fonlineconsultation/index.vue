@@ -1,5 +1,5 @@
 <template>
-  <div class='fonlineconsultation-outer-div' v-bind="tagProp">
+  <div class='fonlineconsultation-outer-div' v-bind="Height">
     <onlineHeader></onlineHeader>
     <onlineContent></onlineContent>
     <onlineInput ></onlineInput>
@@ -8,11 +8,12 @@
 
 <script>
 // components
-import {onlineInput , onlineHeader , onlineContent} from './components';
+import {onlineInput , onlineHeader , onlineContent , pops} from './components';
 const components_arr = {
-  onlineInput:onlineInput,
-  onlineHeader:onlineHeader,
-  onlineContent:onlineContent
+  onlineInput,
+   onlineHeader,
+   onlineContent,
+   pops
 }
 export default {
   name: "FonlineConsultation",
@@ -26,7 +27,7 @@ export default {
     return {};
   },
   computed: {
-    tagProp() {
+    Height() {
       let { height } = this;
       return {
         style: "height:" + height + "px",

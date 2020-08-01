@@ -1,8 +1,9 @@
 // loading icon
 import '../examples/assets/font/iconfont.css';
-import fonlineconsultation from './fonlineconsultation';
+import fonlineconsultation from './fonlineconsultation'; 
+
 const components = [
-   fonlineconsultation
+   fonlineconsultation 
 ];
 // 注册install方法
 const install = function (Vue) {

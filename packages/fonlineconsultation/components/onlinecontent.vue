@@ -1,17 +1,14 @@
 <template>
-  <div class='online-content-all' v-bind="contentProp"> 
-    <contentLeft></contentLeft>
-    <contentRight></contentRight> 
+  <div class="online-content-all" v-bind="contentProp"> 
+    <pops :content="'卧槽卧槽'"></pops>
+    <pops :pos="'left'" :content="'卧槽卧槽卧槽卧槽'"></pops> 
   </div>
 </template>
 
-<script>
-import contentLeft from './contentLeftPop.vue';
-import contentRight from './contentRightPop.vue';
-
-const componets = {
-  contentLeft , 
-  contentRight 
+<script> 
+import pops from "./pops.vue";
+const componets = { 
+  pops
 };
 export default {
   name: "onlineContent",
@@ -54,7 +51,7 @@ export default {
 </script>
 
 <style lang="less">
-.online-content-all { 
+.online-content-all {
   box-sizing: border-box;
   overflow-y: scroll;
 }
