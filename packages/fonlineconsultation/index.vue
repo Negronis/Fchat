@@ -12,6 +12,8 @@
       <pops :pos="'left'" :content="'卧槽卧槽卧槽卧槽'"></pops>
       <pops :pos="'left'" :content="test" type="image"></pops>
       <pops :content="'卧槽卧槽'"></pops> 
+      <pops :content="'http://www.baidu.com'" type="link"></pops> 
+
       <slot name="pops"></slot> 
     </div>
     <!-- input -->

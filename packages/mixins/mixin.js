@@ -99,9 +99,12 @@ export default {
             if (this.controlRows < 3 && addNum != 0) {
                 this.controlRows = Math.ceil(addNum / 24);
             }
-            if (this.controlRows >= 3) {
+            if (this.controlRows >= 3  && addNum) {
                 this.controlRows = Math.ceil(addNum / 24) > 3 ? 3 : Math.ceil(addNum / 24);
-            }
+            } 
+            if(addNum == 0){
+                this.controlRows = 1;
+            } 
         }
     },
     mounted() {

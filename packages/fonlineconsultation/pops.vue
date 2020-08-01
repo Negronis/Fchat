@@ -18,7 +18,9 @@
           </div>
           <div v-if="type === 'audio'">{{content}}</div>
           <div v-if="type === 'video'">{{content}}</div>
-          <div v-if="type === 'link'">{{content}}</div>
+          <div v-if="type === 'link'">
+              <a :href="content">{{content}}</a>
+          </div>
         </div>
       </div>
       <div class="content-avatar" v-if=" pos === 'right' ">
