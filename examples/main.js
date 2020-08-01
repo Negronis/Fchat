@@ -4,9 +4,12 @@ import router from  './router';
 // loading icon
 import '../examples/assets/font/iconfont.css';
 import fonlineconsulatation from '../packages'; 
+import pops from '../packages'; 
 
 Vue.config.productionTip = false;
 Vue.use(fonlineconsulatation); 
+Vue.use(pops); 
+
 
 new Vue ({
    router,
