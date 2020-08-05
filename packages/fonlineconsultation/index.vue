@@ -1,30 +1,35 @@
 <template>
   <div class="fonlineconsultation-outer-div" v-bind="Height">
     <!-- header -->
-    <div id="onlineHeader" class="online-header-all">
+    <div id="onlineHeader" class="online-header-all" ref="onlineHeader">
       <div class="online-header-all-left">功能1</div>
       <div class="online-header-all-center">{{username}}</div>
       <div class="online-header-all-right">功能2</div>
     </div>
     <!-- content -->
-    <div class="online-content-all" v-bind="contentProp">
-      <pops :content="'卧槽卧槽'"></pops>
-      <pops :pos="'left'" :content="'卧槽卧槽卧槽卧槽'"></pops>
-      <pops :pos="'left'" :content="test" type="image"></pops>
-      <pops :content="'卧槽卧槽'"></pops> 
-      <pops :content="'http://www.baidu.com'" type="link"></pops> 
-
-      <slot name="pops"></slot> 
+    <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
+      <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']"></pops>
     </div>
     <!-- input -->
-    <div class='online-input-content' id='onlineInput'>
-         <div class='online-input-content-lefticon'><span :class="leftIcon" :style="{fontSize:leftIconSize+'px',color:leftIconColor}" @click="leftHandlerClick"></span></div>
+    <div class='online-input-content' id='onlineInput' ref='onlineInput'>
+         <div class='online-input-content-lefticon'> 
+           <!-- left  -->
+           <slot name="leftIcon">
+            <span :class="leftIcon" :style="{fontSize:leftIconSize+'px',color:leftIconColor}" @click="leftHandlerClick"></span>
+           </slot>
+          </div>
          <div class='online-input-content-centerInput'>
-            <textarea ref="msgInput" @input="controlRow" cols="30" :rows="controlRows" ></textarea>
+           <!-- center -->
+            <slot name="centerText">
+              <textarea v-model="messageString" ref="msgInput" @input="controlRow" cols="26" :rows="controlRows" ></textarea>
+            </slot>
          </div>
          <div class='online-input-content-righticon'>
-            <span :class="rightIconLeft" :style="{fontSize:rightIconSize+'px',color:rightIconColor}" @click="rightHandlerClick"></span>
-            <span :class="rightIconRight" :style="{right:'',fontSize:rightIconSize +'px',color:rightIconColor}" @click="messageHandler"></span>
+           <!-- right -->
+            <slot name="rightIcon">
+              <span :class="rightIconLeft" :style="{fontSize:rightIconSize+'px',color:rightIconColor}" @click="rightHandlerClick"></span>
+              <span :class="rightIconRight" :style="{right:'',fontSize:rightIconSize +'px',color:rightIconColor}" @click="messageHandler"></span>
+            </slot>
          </div> 
       </div> 
   </div>
@@ -33,6 +38,7 @@
 <script>
 // components
 import  pops  from "./pops.vue";
+import FChat from './handler';
 const components_arr = {
   pops
 };
@@ -50,6 +56,7 @@ export default {
   data() {
     return {
       test:require("@/assets/avatar/left.jpg"),
+      MessageArrays:FChat.getMessage(),
       // header
       authorHeight: 0,
       // input
@@ -63,7 +70,13 @@ export default {
         style: "height:" + height + "px",
       };
     },
-  },
+    // 动态的消息列表
+    MessageArray(){ 
+      return this.MessageArrays;
+    }
+  }, 
+  methods:{ 
+  }
 };
 </script>
 
@@ -143,7 +156,7 @@ body {
       flex:8;
       padding:5px; 
       textarea{ 
-        width:98%;
+        // width:98%;
         padding:8px 1%;
         border-radius:5px;
         outline: none; 

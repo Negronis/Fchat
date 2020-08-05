@@ -1,10 +1,6 @@
 <template>
   <div>
-    <FonlineConsultation>
-      <template slot="pops">
-          <pops :pos="'left'" :type="'message'" :content="'卧槽你妈'"></pops>
-      </template>
-    </FonlineConsultation>
+    <FonlineConsultation ></FonlineConsultation>
   </div>
 </template>
 

@@ -12,7 +12,7 @@
           <slot name="audio"></slot>
           <slot name="video"></slot>
           <slot name="link"></slot>
-          <div v-if="type === 'message'">{{content}}</div>
+          <pre v-if="type === 'message'">{{content}}</pre>
           <div v-if="type === 'image'">
             <img :src="content" alt="loading" width="100%" style="margin-top:10px" />
           </div>
@@ -101,7 +101,6 @@ export default {
 <style lang="less">
 
 // 全局通用参数
-
 .content-pops-global (@justify:flex-end) {
   vertical-align: middle;
   text-align: left;
@@ -109,6 +108,10 @@ export default {
   position: relative;
   display: flex;
   justify-content: @justify;
+  pre{
+    padding:0;
+    margin:0;
+  }
 }
 .content-pops-after-global {
   content: "";
@@ -125,7 +128,7 @@ export default {
   border-radius: 5px;
   padding: 5px;
   background: #6aea9e;
-  line-height: 30px;
+  line-height: 30px; 
 }
 .content-pops-all {
   display: flex;
@@ -160,7 +163,7 @@ export default {
   }
   &-content {
     .content-pops-content-global();
-    text-align: right;
+    text-align: left;
     &:hover {
       filter: grayscale(40%);
     }
