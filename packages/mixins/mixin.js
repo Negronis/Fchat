@@ -84,9 +84,9 @@ export default {
         // input
         // 重计算高度
         resizeInputHeight() {
-            this.authorHeight =
-                (this.$refs.onlineHeader.offsetHeight || 0) +
-                (this.$refs.onlineInput.offsetHeight || 0);
+            // this.authorHeight =
+            //     (this.$refs.onlineHeader.offsetHeight || 0) +
+            //     (this.$refs.onlineInput.offsetHeight || 0);
         },
         // 重置输入
         initInput() {

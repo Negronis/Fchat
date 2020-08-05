@@ -19,7 +19,6 @@ class FChat {
    }
    // 发送普通消息
    addMessage(msg, pos) {
-      console.log(msg);
       let MessageObject = {};
       MessageObject['content'] = msg,
          MessageObject['type'] = msg.indexOf('http') == -1 ? "message" : 'link',
