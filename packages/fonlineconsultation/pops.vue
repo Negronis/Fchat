@@ -12,7 +12,7 @@
           <slot name="audio"></slot>
           <slot name="video"></slot>
           <slot name="link"></slot>
-          <pre v-if="type === 'message'">{{content}}</pre>
+          <pre   v-if="type === 'message'">{{content}}</pre>
           <div v-if="type === 'image'">
             <img :src="content" alt="loading" width="100%" style="margin-top:10px" />
           </div>
@@ -111,6 +111,9 @@ export default {
   pre{
     padding:0;
     margin:0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
   }
 }
 .content-pops-after-global {

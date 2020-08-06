@@ -1,3 +1,5 @@
+import { resolve } from "core-js/fn/promise";
+
 class FChat {
    constructor(message) {
       this.message = message;
@@ -19,15 +21,18 @@ class FChat {
    }
    // 发送普通消息
    addMessage(msg, pos) {
-      let MessageObject = {};
-      MessageObject['content'] = msg,
-         MessageObject['type'] = msg.indexOf('http') == -1 ? "message" : 'link',
-         MessageObject['pos'] = pos || "right";
-      this.message.push(MessageObject);
-      //   自动滚动到底
-      setTimeout(() => {
-         this.scrollMessage();
-      }, 0)
+      return new Promise((resolve,reject)=>{ 
+         let MessageObject = {};
+         MessageObject['content'] = msg,
+            MessageObject['type'] = msg.indexOf('http') == -1 ? "message" : 'link',
+            MessageObject['pos'] = pos || "right";
+         this.message.push(MessageObject);
+         //   自动滚动到底
+         setTimeout(() => {
+            this.scrollMessage();
+            resolve();
+         }, 0)
+      })
    }
    addImage() {
 

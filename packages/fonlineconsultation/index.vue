@@ -1,5 +1,5 @@
 <template>
-  <div class="fonlineconsultation-outer-div" v-bind="Height">
+  <div class="fonlineconsultation-outer-div" v-bind="Height" >
     <!-- header -->
     <div id="onlineHeader" class="online-header-all" ref="onlineHeader">
       <div class="online-header-all-left">功能1</div>
@@ -21,7 +21,7 @@
          <div class='online-input-content-centerInput'>
            <!-- center -->
             <slot name="centerText">
-              <textarea v-model="messageString" ref="msgInput" @input="controlRow" cols="26" :rows="controlRows" ></textarea>
+              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" v-model="messageString" ref="msgInput" @input="controlRow" cols="26" :rows="controlRows" ></textarea>
             </slot>
          </div>
          <div class='online-input-content-righticon'>
@@ -59,15 +59,17 @@ export default {
       MessageArrays:FChat.getMessage(),
       // header
       authorHeight: 0,
+      headerHeight:0,
       // input
       controlRows:1, 
+      fheight:0
     };
   },
   computed: {
     Height() {
-      let { height } = this;
+      let { fheight , headerHeight } = this;
       return {
-        style: "height:" + height + "px",
+        // style: "height:" + fheight - headerHeight  + "px",
       };
     },
     // 动态的消息列表
@@ -76,6 +78,9 @@ export default {
     }
   }, 
   methods:{ 
+  },
+  created(){
+     this.fheight = this.height;
   }
 };
 </script>
@@ -83,19 +88,22 @@ export default {
 <style lang="less">
 body {
   margin: 0;
-  padding: 0;
+  padding: 0; 
+  position: relative;
+} 
+div { 
 }
 .fonlineconsultation-outer-div {
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 // header
-.online-header-all {
+.online-header-all { 
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  min-height: 40px;
+  height: 40px;
   line-height: 40px;
-  text-align: center;
+  text-align: center;  
   background-image: linear-gradient(
     to right,
     #eaeaea 0%,
@@ -115,13 +123,11 @@ body {
 // content
 .online-content-all {
   box-sizing: border-box;
-  overflow-y: scroll;
+  overflow-y: scroll; 
+  border:1px solid;
 }
 // input
-.online-input-content{  
-  position: absolute;
-  bottom:0px;
-  left:0px;
+.online-input-content{   
   width:100%;
   background-image:linear-gradient(to right , #EAEAEA  0% , #fff 50%, #EAEAEA 100%);
   box-sizing: border-box;
