@@ -21,7 +21,7 @@
          <div class='online-input-content-centerInput'>
            <!-- center -->
             <slot name="centerText">
-              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" v-model="messageString" ref="msgInput" @input="controlRow" cols="26" :rows="controlRows" ></textarea>
+              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
             </slot>
          </div>
          <div class='online-input-content-righticon'>
@@ -58,11 +58,11 @@ export default {
       test:require("@/assets/avatar/left.jpg"),
       MessageArrays:FChat.getMessage(),
       // header
-      authorHeight: 0,
-      headerHeight:0,
+      authorHeight: 0, 
       // input
-      controlRows:1, 
-      fheight:0
+      controlRows:1,  
+      //content 
+      innerHeight:0, //保存content消息框响应高度
     };
   },
   computed: {
@@ -76,9 +76,7 @@ export default {
     MessageArray(){ 
       return this.MessageArrays;
     }
-  }, 
-  methods:{ 
-  },
+  },  
   created(){
      this.fheight = this.height;
   }
@@ -162,7 +160,7 @@ div {
       flex:8;
       padding:5px; 
       textarea{ 
-        // width:98%;
+        width:100%;
         padding:8px 1%;
         border-radius:5px;
         outline: none; 

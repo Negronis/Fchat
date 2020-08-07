@@ -81,22 +81,46 @@ export default {
     },
     methods: {
         // input 
-        // 获取焦点时的高度控制 -- 手机端兼容
+        // 修改消息框(content)高度实现响应方法
+        changContentHeight(height) {
+            new Promise(( resolve ) => {
+                this.$refs.onlineContentAll.style.height = this.contentHeight ||
+                    height - (
+                        (this.$refs.onlineHeader.offsetHeight || 0) +
+                        (this.$refs.onlineInput.offsetHeight || 0)
+                    ) + "px";
+                resolve();
+            }).then(() => {
+                this.scrollAll();
+            }).catch(err => {
+                throw new Error(err);
+            })
+        },
+        // 跳转到页面最顶部，消息最底部滚动
+        scrollAll() {
+            window.scrollTo(0, 0);
+            FChat.scrollMessage();
+        },
+        // 获取焦点时的高度和滚动控制 -- 手机端兼容
         controlHeight(handler) {
             setTimeout(() => {
-                this.$refs.onlineContentAll.style.height = this.contentHeight ||
-                    window.innerHeight - this.authorHeight + "px";
-                // 跳转到最顶和消息尾
-                window.scrollTo(0, 0);
-                FChat.scrollMessage();
-            }, 150)
+                /**
+                 * 由于行数变换的瞬间高度变化 整体高度发生变化导致window.innerHeight变为整体页面高度
+                 * ，故保存刚获取焦点时的正常高度用作换行相应的处理
+                 * 
+                 * */
+                console.log("触发"+handler,window.innerHeight , this.innerHeight);  
+                this.changContentHeight(window.innerHeight);
+                this.innerHeight = window.innerHeight; 
+            }, 450)
             /** 
              * 焦点获得 - - - 锁定滚动
              * 失去焦点 - - - 解开滚动
             */
             if (handler === 'blur') {
                 this.controlScroll(document.body, true);
-            } else {
+            }
+            if (handler === 'focus') {
                 this.controlScroll(document.body, false);
             }
         },
@@ -105,16 +129,17 @@ export default {
             this.messageString = "";
             this.controlRows = 1;
         },
-        // 方法可定 通过this.$ref.emit()调用
-        leftHandlerClick() {
+        // 禁止滚动与允许滚动
+        scroll(event) {
+            event.preventDefault();
         },
-        rightHandlerClick() { },
-        // 消息发出
-        messageHandler() {
-            let tex = this.$refs.msgInput;
-            FChat.addMessage(tex.value).then(() => {
-                setTimeout(() => { this.initInput(); }, 0)
-            });
+        // 控制是否锁定滚动方法
+        controlScroll(dom, isScroll) {
+            if (isScroll) {
+                dom.removeEventListener('touchmove', this.scroll);
+            } else {
+                dom.addEventListener('touchmove', this.scroll, { passive: false });
+            }
         },
         // textarea行数控制
         controlRow() {
@@ -138,7 +163,6 @@ export default {
             // 自动计算最大行数
             if (this.controlRows < 3 && addNum != 0) {
                 this.controlRows = Math.ceil(addNum / cols);
-                console.log(this.controlRows);
             }
             if (this.controlRows >= 3 && addNum) {
                 this.controlRows = Math.ceil(addNum / cols) > 3 ? 3 : Math.ceil(addNum / cols);
@@ -146,44 +170,44 @@ export default {
             if (addNum == 0) {
                 this.controlRows = 1;
             }
-            // bug换行以后高度计算有问题
-            setTimeout(() => {
-                this.authorHeight =
-                (this.$refs.onlineHeader.offsetHeight || 0) +
-                (this.$refs.onlineInput.offsetHeight || 0); 
-                window.scrollTo(0,0) 
-            }, 0)
         },
-        // 禁止滚动与允许滚动
-        scroll(event) {
-            event.preventDefault();
+        // 方法可定 通过this.$ref.emit()调用
+        leftHandlerClick() {
         },
-        // 控制是否锁定滚动方法
-        controlScroll(dom, isScroll) {
-            if (isScroll) {
-                dom.removeEventListener('touchmove', this.scroll);
-            } else {
-                dom.addEventListener('touchmove', this.scroll, { passive: false });
-            }
-        },
-
+        rightHandlerClick() { },
+        // 消息发出
+        messageHandler() {
+            let tex = this.$refs.msgInput;
+            FChat.addMessage(tex.value).then(() => {
+                setTimeout(() => { this.initInput(); }, 0)
+            });
+        }
     },
+    //事件绑定/高度计算
     mounted() {
         // content
-        this.$nextTick(() => {
+        this.$nextTick(() => { 
             this.authorHeight =
                 (this.$refs.onlineHeader.offsetHeight || 0) +
-                (this.$refs.onlineInput.offsetHeight || 0);
-            this.headerHeight = (this.$refs.onlineHeader.offsetHeight || 0);
-        });
-        const that = this;
+                (this.$refs.onlineInput.offsetHeight || 0); 
+        }); 
         //绑定enter发送
         window.addEventListener('keydown', (e) => {
             let { keyCode } = e;
             if (keyCode === 13) {
-                that.messageHandler();
+                this.messageHandler();
             }
         })
-
+        // 监听页面高度变化 - 安卓收起输入法响应
+        window.addEventListener('resize', this.controlHeight());
     },
+    watch: {
+        // 监听行数变化 响应高度
+        controlRows(val) {
+            console.log('变化')
+            setTimeout(() => {
+                this.changContentHeight(this.innerHeight);
+            }, 0)
+        }
+    }
 }
