@@ -3,7 +3,8 @@ import FChat from '../fonlineconsultation/handler';
 export default {
     data() {
         return {
-            messageString: ""
+            messageString: "",
+            controlFocus: true, 
         }
     },
     props: {
@@ -60,11 +61,12 @@ export default {
         // pop
     },
     computed: {
-        // index
+        // index 
 
-        // header
+        // header 
 
         // content 
+
         contentProp() {
             let { contentHeight, authorHeight, contentBg } = this;
             let retObj = {};
@@ -75,7 +77,7 @@ export default {
                 ";background:" + contentBg || "#f5f5f5";
             return retObj;
         },
-        // input
+        // input 
 
         // pop
     },
@@ -83,7 +85,7 @@ export default {
         // input 
         // 修改消息框(content)高度实现响应方法
         changContentHeight(height) {
-            new Promise(( resolve ) => {
+            new Promise((resolve) => {
                 this.$refs.onlineContentAll.style.height = this.contentHeight ||
                     height - (
                         (this.$refs.onlineHeader.offsetHeight || 0) +
@@ -103,25 +105,37 @@ export default {
         },
         // 获取焦点时的高度和滚动控制 -- 手机端兼容
         controlHeight(handler) {
-            setTimeout(() => {
-                /**
-                 * 由于行数变换的瞬间高度变化 整体高度发生变化导致window.innerHeight变为整体页面高度
-                 * ，故保存刚获取焦点时的正常高度用作换行相应的处理
-                 * 
-                 * */
-                console.log("触发"+handler,window.innerHeight , this.innerHeight);  
-                this.changContentHeight(window.innerHeight);
-                this.innerHeight = window.innerHeight; 
-            }, 450)
             /** 
-             * 焦点获得 - - - 锁定滚动
-             * 失去焦点 - - - 解开滚动
+             * 失去焦点 
+             * 解开滚动 
+             * 控制参数controlFocus 
+             * 阻止重复获取focus bug
             */
             if (handler === 'blur') {
                 this.controlScroll(document.body, true);
+                this.controlFocus = true;
             }
-            if (handler === 'focus') {
-                this.controlScroll(document.body, false);
+            // 阻止重复获取focus bug
+            if (this.controlFocus) {
+                setTimeout(() => {
+                    /**
+                     * 由于行数变换的瞬间高度变化 整体高度发生变化
+                     * 导致window.innerHeight变为整体页面高度
+                     * 故保存刚获取焦点时的正常高度用作换行相应的处理 
+                     * */
+                    this.changContentHeight(window.innerHeight);
+                    this.innerHeight = window.innerHeight;
+                }, 450);
+                /**  
+                 * 焦点获得 
+                 * 锁定滚动
+                 * 设定controlFocus为false 
+                 * 防止多次focus触发
+                */
+                if (handler === 'focus') {
+                    this.controlScroll(document.body, false);
+                    this.controlFocus = false;
+                }
             }
         },
         // 重置输入
@@ -143,10 +157,10 @@ export default {
         },
         // textarea行数控制
         controlRow() {
-            let tex = this.$refs.msgInput,
-                ChiReg = /[\u4e00-\u9fa5]/,
-                values = tex.value.split(''),
-                addNum = 0,
+            let tex = this.$refs.msgInput;
+            let ChiReg = /[\u4e00-\u9fa5]/;
+            let values = tex.value.split('');
+            let addNum = 0,
                 cols = tex.cols;
             values.forEach((e) => {
                 // 中英文
@@ -156,9 +170,10 @@ export default {
                     addNum += 1;
                 }
                 // 换行相应 -- 暂不开启 
-                // if (e.indexOf('\n') != -1) {
-                //     addNum = addNum + cols;
-                // }
+                if (e.indexOf('\n') != -1) {
+                    // addNum = addNum + cols;
+                    // return;
+                }
             })
             // 自动计算最大行数
             if (this.controlRows < 3 && addNum != 0) {
@@ -174,23 +189,29 @@ export default {
         // 方法可定 通过this.$ref.emit()调用
         leftHandlerClick() {
         },
-        rightHandlerClick() { },
+        rightHandlerClick() {
+            FChat.addImage();
+        },
         // 消息发出
         messageHandler() {
             let tex = this.$refs.msgInput;
-            FChat.addMessage(tex.value).then(() => {
-                setTimeout(() => { this.initInput(); }, 0)
-            });
+            if (tex) {
+                FChat.addMessage(tex.value,"right").then(()=>{
+                    setTimeout(()=>{
+                        this.initInput();
+                    },0)
+                })
+            }
         }
     },
     //事件绑定/高度计算
     mounted() {
         // content
-        this.$nextTick(() => { 
+        this.$nextTick(() => {
             this.authorHeight =
                 (this.$refs.onlineHeader.offsetHeight || 0) +
-                (this.$refs.onlineInput.offsetHeight || 0); 
-        }); 
+                (this.$refs.onlineInput.offsetHeight || 0);
+        });
         //绑定enter发送
         window.addEventListener('keydown', (e) => {
             let { keyCode } = e;
@@ -199,12 +220,13 @@ export default {
             }
         })
         // 监听页面高度变化 - 安卓收起输入法响应
-        window.addEventListener('resize', this.controlHeight());
+        window.addEventListener('resize', () => {
+            this.changContentHeight(window.innerHeight);
+        });
     },
     watch: {
         // 监听行数变化 响应高度
         controlRows(val) {
-            console.log('变化')
             setTimeout(() => {
                 this.changContentHeight(this.innerHeight);
             }, 0)

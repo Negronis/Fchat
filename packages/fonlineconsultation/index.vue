@@ -21,7 +21,7 @@
          <div class='online-input-content-centerInput'>
            <!-- center -->
             <slot name="centerText">
-              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
+              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" id="msgInput" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
             </slot>
          </div>
          <div class='online-input-content-righticon'>
@@ -32,6 +32,7 @@
             </slot>
          </div> 
       </div> 
+      <input type="file" id="sendImg" style="display:none">
   </div>
 </template>
 
@@ -121,8 +122,7 @@ div {
 // content
 .online-content-all {
   box-sizing: border-box;
-  overflow-y: scroll; 
-  border:1px solid;
+  overflow-y: scroll;  
 }
 // input
 .online-input-content{   

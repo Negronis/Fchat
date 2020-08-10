@@ -7,20 +7,38 @@
       </div>
       <div :class="className">
         <div :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
+          <!-- 用户自定 -->
           <slot name="image"></slot>
           <slot name="message"></slot>
           <slot name="audio"></slot>
-          <slot name="video"></slot>
-          <slot name="link"></slot>
-          <pre   v-if="type === 'message'">{{content}}</pre>
-          <div v-if="type === 'image'">
-            <img :src="content" alt="loading" width="100%" style="margin-top:10px" />
+          <slot name="video"> </slot>
+          <!-- 默认 -->
+          <pre   v-if="type === 'message'" v-html="content"> 
+          </pre>
+          <div v-if="type === 'image'" style="text-align:center">
+            <div v-if="!imgLoading" class="content-pops-all-img-loading">
+              <img src="@/assets/svg/oval.svg" width="50px" alt="">
+            </div>
+            <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoading == true ? 'block' : 'none'}" />
           </div>
           <div v-if="type === 'audio'">{{content}}</div>
-          <div v-if="type === 'video'">{{content}}</div>
-          <div v-if="type === 'link'">
-              <a :href="content">{{content}}</a>
-          </div>
+          <div v-if="type === 'video'">
+          <video
+              width="100%"
+              class="videoBox" 
+              src="@/assets/test.mp4"  
+              preload  
+              controls
+              webkit-playsinline="true" 
+              playsinline="true"   
+              x-webkit-airplay="allow" 
+              x5-video-player-type="h5"  
+              x5-video-player-fullscreen="true" 
+              x5-video-orientation="portraint" 
+          >
+          </video>
+
+          </div> 
         </div>
       </div>
       <div class="content-avatar" v-if=" pos === 'right' ">
@@ -31,6 +49,7 @@
 </template>
 
 <script>
+import FChat from './handler';
 export default {
   name: "pops",
   props: {
@@ -60,7 +79,7 @@ export default {
       type: String,
       default: "message",
       validator: (value) => {
-        let types = ["message", "image", "video", "autio", "link"].filter((e) =>
+        let types = ["message", "image", "video", "autio"].filter((e) =>
           e == value ? e : ""
         );
         if (!types.join("")) {
@@ -75,7 +94,22 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      imgLoading:false
+    };
+  },
+  methods:{
+    //图片的loading方法
+    imgLoad(){
+        console.log('加载完成');
+        setTimeout(()=>{
+          this.imgLoading = true;
+          setTimeout(() => {
+            FChat.scrollMessage();
+          }, 0)
+        },1000)
+        
+    },
   },
   computed: {
     // 气泡相关属性
@@ -95,6 +129,15 @@ export default {
       return "content-pops-" + pos;
     },
   },
+  mounted(){
+    this.$nextTick(()=>{
+      // 视频加载完
+      // let video = this.$refs.PopsVideo.addEventListener('canplaythrough',function(){
+      //   console.log('视频加载完毕');
+      //   FChat.scrollMessage();
+      // }); 
+    })
+  }
 };
 </script>
 
@@ -136,6 +179,12 @@ export default {
 .content-pops-all {
   display: flex;
   margin: 20px;
+  &-img-loading{
+    background:rgba(0,0,0,.5);
+    width:270px;
+    height:270px;
+    line-height:310px;
+  }
 }
 .content-avatar {
   width: 50px;

@@ -1,7 +1,6 @@
 // loading icon
 import '../examples/assets/font/iconfont.css';
 import {fonlineconsultation , pops} from './fonlineconsultation'; 
-
 const components = [
    fonlineconsultation , pops
 ];
@@ -15,5 +14,6 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 export default {
    install,
-   ...components
+   fonlineconsultation ,
+   pops
 }

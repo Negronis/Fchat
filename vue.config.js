@@ -1,3 +1,4 @@
+
 const path = require('path'); 
 function resolve(dir) {
 	return path.join(__dirname, dir)
@@ -12,7 +13,8 @@ const baseConfig = {
          .use("babel")
          .loader("babel-loader")
       config.resolve.alias
-      .set('@',resolve('examples'))
+      .set('@',resolve('examples')) 
+      config.entry('main').add('babel-polyfill');
    }
 }
 // 修改出/入口
