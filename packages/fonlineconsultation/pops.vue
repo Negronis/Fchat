@@ -23,21 +23,8 @@
           </div>
           <div v-if="type === 'audio'">{{content}}</div>
           <div v-if="type === 'video'">
-          <video
-              width="100%"
-              class="videoBox" 
-              src="@/assets/test.mp4"  
-              preload  
-              controls
-              webkit-playsinline="true" 
-              playsinline="true"   
-              x-webkit-airplay="allow" 
-              x5-video-player-type="h5"  
-              x5-video-player-fullscreen="true" 
-              x5-video-orientation="portraint" 
-          >
-          </video>
-
+            <video  width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint">
+            </video> 
           </div> 
         </div>
       </div>
@@ -100,8 +87,7 @@ export default {
   },
   methods:{
     //图片的loading方法
-    imgLoad(){
-        console.log('加载完成');
+    imgLoad(){ 
         setTimeout(()=>{
           this.imgLoading = true;
           setTimeout(() => {

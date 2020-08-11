@@ -8,6 +8,7 @@
     </div>
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
+      {{MessageArray}}
       <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']"></pops>
     </div>
     <!-- input -->
@@ -28,10 +29,15 @@
            <!-- right -->
             <slot name="rightIcon">
               <span :class="rightIconLeft" :style="{fontSize:rightIconSize+'px',color:rightIconColor}" @click="rightHandlerClick"></span>
-              <span :class="rightIconRight" :style="{right:'',fontSize:rightIconSize +'px',color:rightIconColor}" @click="messageHandler"></span>
+              <span :class="rightIconRight" :style="{right:'',fontSize:rightIconSize +'px',color:rightIconColor}"  @click="messageHandler"></span>
             </slot>
          </div> 
       </div> 
+      <slot name="loading">
+        <div class='MessageLoading'  id="messageLoading" :style="{display:'none' , height:loadingHeight}"> 
+            <img class="MessageLoading-Img" width="50px"  src="@/assets/svg/oval.svg" alt="" /> 
+        </div>
+      </slot> 
       <input type="file" id="sendImg" style="display:none">
   </div>
 </template>
@@ -55,11 +61,11 @@ export default {
     },
   },
   data() {
-    return {
-      test:require("@/assets/avatar/left.jpg"),
-      MessageArrays:FChat.getMessage(),
+    return {  
       // header
       authorHeight: 0, 
+      // 发送消息的loading
+      loading:true,
       // input
       controlRows:1,  
       //content 
@@ -75,7 +81,8 @@ export default {
     },
     // 动态的消息列表
     MessageArray(){ 
-      return this.MessageArrays;
+      console.log(FChat.getMessage());
+      return FChat.getMessage();
     }
   },  
   created(){
@@ -89,9 +96,7 @@ body {
   margin: 0;
   padding: 0; 
   position: relative;
-} 
-div { 
-}
+}  
 .fonlineconsultation-outer-div {
   box-sizing: border-box; 
 }
@@ -169,5 +174,22 @@ div {
         resize:none;
       }
   }  
+}
+.MessageLoading{ 
+  width:100%; 
+  position: fixed;
+  z-index:1000;
+  top:0px; 
+  box-sizing: border-box;
+  background:rgba(0,0,0,.5);
+  &-Img{
+     position: absolute;
+      z-index:1000;
+      top:0px;
+      left:0px;
+      bottom:0px;
+      right:0px;
+      margin:auto;
+  }
 }
 </style>

@@ -4,7 +4,8 @@ export default {
     data() {
         return {
             messageString: "",
-            controlFocus: true, 
+            controlFocus: true,
+            loadingHeight:0
         }
     },
     props: {
@@ -26,6 +27,9 @@ export default {
             default: "#F5F5F5",
         },
         // input
+        sendMessage: {
+            default: ""
+        },
         leftIcon: {
             type: String,
             default: "iconfont icon-weixinyuyin"
@@ -53,11 +57,7 @@ export default {
         rightIconColor: {
             type: String,
             default: "#000"
-        },
-        sendMessage: {
-            type: String,
-            default: ""
-        }
+        }, 
         // pop
     },
     computed: {
@@ -91,6 +91,7 @@ export default {
                         (this.$refs.onlineHeader.offsetHeight || 0) +
                         (this.$refs.onlineInput.offsetHeight || 0)
                     ) + "px";
+                    this.loadingHeight =  height+'px';
                 resolve();
             }).then(() => {
                 this.scrollAll();
@@ -190,17 +191,15 @@ export default {
         leftHandlerClick() {
         },
         rightHandlerClick() {
-            FChat.addImage();
+            this.$emit('sendImg',FChat.addImage());
         },
         // 消息发出
         messageHandler() {
-            let tex = this.$refs.msgInput;
-            if (tex) {
-                FChat.addMessage(tex.value,"right").then(()=>{
-                    setTimeout(()=>{
-                        this.initInput();
-                    },0)
-                })
+            let tex = document.getElementById('msgInput'); 
+            if(tex){
+                if(!FChat.getLoading()){
+                    this.$emit('send',FChat.addMessage(tex.value));
+                }
             }
         }
     },
@@ -215,8 +214,8 @@ export default {
         //绑定enter发送
         window.addEventListener('keydown', (e) => {
             let { keyCode } = e;
-            if (keyCode === 13) {
-                this.messageHandler();
+            if (keyCode === 13) { 
+                this.messageHandler(); 
             }
         })
         // 监听页面高度变化 - 安卓收起输入法响应
