@@ -15,15 +15,15 @@
           <!-- 默认 -->
           <pre   v-if="type === 'message'" v-html="content"> 
           </pre>
-          <div v-if="type === 'image'" style="text-align:center">
-            <div v-if="!imgLoading" class="content-pops-all-img-loading">
+          <div v-if="type === 'image'" style="text-align:center"> 
+            <div v-if="!imgLoadingComplete" class="content-pops-all-img-loading">
               <img src="@/assets/svg/oval.svg" width="50px" alt="">
             </div>
-            <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoading == true ? 'block' : 'none'}" />
+            <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoadingComplete == true ? 'block' : 'none'}" />
           </div>
           <div v-if="type === 'audio'">{{content}}</div>
           <div v-if="type === 'video'">
-            <video  width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint">
+            <video id="PopsVideo" width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint">
             </video> 
           </div> 
         </div>
@@ -82,19 +82,16 @@ export default {
   },
   data() {
     return {
-      imgLoading:false
+      imgLoadingComplete:false
     };
   },
   methods:{
     //图片的loading方法
-    imgLoad(){ 
-        setTimeout(()=>{
-          this.imgLoading = true;
-          setTimeout(() => {
-            FChat.scrollMessage();
-          }, 0)
-        },1000)
-        
+    imgLoad(){   
+        this.imgLoadingComplete = true;
+        setTimeout(() => {
+          FChat.scrollMessage();
+        }, 0) 
     },
   },
   computed: {
@@ -117,12 +114,16 @@ export default {
   },
   mounted(){
     this.$nextTick(()=>{
-      // 视频加载完
-      // let video = this.$refs.PopsVideo.addEventListener('canplaythrough',function(){
-      //   console.log('视频加载完毕');
-      //   FChat.scrollMessage();
-      // }); 
-    })
+      // 视频加载完 
+      let video = document.getElementById('PopsVideo');
+      if(video){
+        video.addEventListener('canplaythrough',function(){
+            console.log('视频加载完毕');
+            FChat.scrollMessage();
+          }); 
+      }
+     
+    }) 
   }
 };
 </script>

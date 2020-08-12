@@ -1,15 +1,35 @@
 class FChat {
-   constructor(message) {
+   constructor(message,loadingState,maxSize,onlyImage) {
       this.message = message;
-      this.loadingState = false;
+      this.loadingState = loadingState || false ;
+      this.maxSize = maxSize || 2 ;
+      this.onlyImage = onlyImage || false;
+   }
+   setConfig(key,value,config){ 
+      if(!config){
+         if(this[key]){
+            this[key] = value; 
+         }else{
+            throw Error('参数错误')
+         }
+      }else{
+         for(var i in config){
+            if(this[i]){
+               this[i] = config[i];
+            }
+         }
+      }
+
    }
    // Loading状态
-   loading(loadingId,time){
+   loading(loadingId,time,texDisabled = false){
       let tex = document.getElementById('msgInput');
       let loadingDiv = document.getElementById(loadingId || 'messageLoading');
       loadingDiv.style.display = 'block';
       this.loadingState = true;
-      tex.disabled = true;
+      if(texDisabled){
+         tex.disabled = true;
+      }
       // 超时处理
       setTimeout(()=>{
          loadingDiv.style.display = 'none';
@@ -49,8 +69,16 @@ class FChat {
       tex.rows = 1, tex.value = "", tex.dispatchEvent(new Event('input'));
    }
    // 设置消息列表
-   setMessageList(arr){
-      this.message = arr;
+   setMessageList(arr,handleFuc){
+      this.message.length = 0;
+      if(!handleFuc){
+         if(arr.length == 0){
+            return ;
+         }
+         arr.forEach(e=>this.message.push(e));
+      }else{
+         handleFuc.call(this,arr)
+      }
    }
    // 返回消息列表
    getMessage() {
@@ -71,7 +99,7 @@ class FChat {
       return MessageObject;
    }
    // 图片消息
-   addImage(pos,onlyImg=false) {
+   addImage(pos) { 
       return new Promise((resolve, reject) => {
          let MessageObject = {};
          let imgInput = document.getElementById('sendImg');
@@ -82,16 +110,20 @@ class FChat {
             let files = e.target.files, file;
             if (files && files.length != 0) {
                file = files[0];
-               let { type } = file; 
+               let { type, size } = file; 
+               size = (size / 1024).toFixed(2) / 1000; 
                let fileReader = new FileReader();
                fileReader.readAsDataURL(file);
-               fileReader.onload = (event) => {
+               fileReader.onload = (event) => { 
                   const result = event.target.result;
                   MessageObject['content'] = result;
                   if (type.indexOf('image') != -1) {
-                     MessageObject['type'] = "image";
+                     MessageObject['type'] = "image";  
+                     if(size > this.maxSize){ 
+                        reject('上传图片过大');
+                     }
                   }
-                  if (type.indexOf('video') != -1 && !onlyImg) { 
+                  if (type.indexOf('video') != -1 && !this.onlyImg) { 
                      MessageObject['type'] = "video";
                   }
                   if(type.indexOf('image') == -1 && type.indexOf('video') == -1){

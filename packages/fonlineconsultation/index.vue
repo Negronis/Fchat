@@ -8,7 +8,6 @@
     </div>
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
-      {{MessageArray}}
       <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']"></pops>
     </div>
     <!-- input -->
@@ -61,7 +60,8 @@ export default {
     },
   },
   data() {
-    return {  
+    return { 
+      MessageArrays:FChat.getMessage(),
       // header
       authorHeight: 0, 
       // 发送消息的loading
@@ -81,8 +81,7 @@ export default {
     },
     // 动态的消息列表
     MessageArray(){ 
-      console.log(FChat.getMessage());
-      return FChat.getMessage();
+      return this.MessageArrays;
     }
   },  
   created(){
