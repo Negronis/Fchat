@@ -20,7 +20,11 @@ router.get('/getMessage', (req, res) => {
       { "content": "http://192.168.1.4:8080/img.png", "type": "image", "pos": "right" },
       { "content": "阿萨德阿萨德", "type": "message", "pos": "left" },
       { "content": "阿萨德", "type": "message", "pos": "right" },
-      { "content": "阿萨德", "type": "message", "pos": "left" }
+      { "content": "阿萨德", "type": "message", "pos": "left" },
+      { "content": "", "type": "audio", "pos": "left" ,"duration":1},
+      { "content": "", "type": "audio", "pos": "right" }
+
+
    ];
    res.json(sendData);
 })

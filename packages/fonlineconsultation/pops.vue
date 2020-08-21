@@ -13,15 +13,23 @@
           <slot name="audio"></slot>
           <slot name="video"> </slot>
           <!-- 默认 -->
-          <pre   v-if="type === 'message'" v-html="content"> 
+          <pre v-if="type === 'message'" v-html="content"> 
           </pre>
           <div v-if="type === 'image'" style="text-align:center"> 
+            <!-- loading  -->
             <div v-if="!imgLoadingComplete" class="content-pops-all-img-loading">
               <img src="@/assets/svg/oval.svg" width="50px" alt="">
             </div>
+            <!-- 图片 -->
             <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoadingComplete == true ? 'block' : 'none'}" />
           </div>
-          <div v-if="type === 'audio'">{{content}}</div>
+          <div v-if="type === 'audio'"> 
+              <div :class="'content-pops-'+pos+'-content-audio'" @click="play(content,duration)">
+                <span v-if="pos=='right'">{{typeof duration == "number" ? duration + '"' : duration}}&nbsp;</span>
+                <span :class="pos == 'left' ? 'FiconFont  icon-yuyin1' : 'FiconFont  icon-yuyin'"></span>
+                <span v-if="pos=='left'">&nbsp;{{typeof duration == "number" ? duration + '"' : duration}}</span>
+              </div>
+          </div>
           <div v-if="type === 'video'">
             <video id="PopsVideo" width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint">
             </video> 
@@ -66,7 +74,7 @@ export default {
       type: String,
       default: "message",
       validator: (value) => {
-        let types = ["message", "image", "video", "autio"].filter((e) =>
+        let types = ["message", "image", "video", "audio"].filter((e) =>
           e == value ? e : ""
         );
         if (!types.join("")) {
@@ -79,6 +87,8 @@ export default {
     content: {
       type: String,
     },
+    duration:{ 
+    }
   },
   data() {
     return {
@@ -93,6 +103,10 @@ export default {
           FChat.scrollMessage();
         }, 0) 
     },
+    // 语音播放
+    play(src,duration){
+      FChat.playVoice(src,duration);
+    }
   },
   computed: {
     // 气泡相关属性
@@ -127,85 +141,4 @@ export default {
   }
 };
 </script>
-
-<style lang="less">
-
-// 全局通用参数
-.content-pops-global (@justify:flex-end) {
-  vertical-align: middle;
-  text-align: left;
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: @justify;
-  pre{
-    padding:0;
-    margin:0;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    word-break: break-all;
-  }
-}
-.content-pops-after-global {
-  content: "";
-  width: 0px;
-  height: 0px;
-  border: 5px solid #6aea9e;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  position: relative;
-  top: 10px;
-}
-.content-pops-content-global {
-  font-size: 15px;
-  border-radius: 5px;
-  padding: 5px;
-  background: #6aea9e;
-  line-height: 30px; 
-}
-.content-pops-all {
-  display: flex;
-  margin: 20px;
-  &-img-loading{
-    background:rgba(0,0,0,.5);
-    width:270px;
-    height:270px;
-    line-height:310px;
-  }
-}
-.content-avatar {
-  width: 50px;
-  height: 40px;
-  vertical-align: middle;
-}
-
-.content-pops-right {
-  .content-pops-global();
-  &::after {
-    .content-pops-after-global();
-    border-right-color: transparent;
-  }
-
-  &-content {
-    .content-pops-content-global();
-    text-align: left;
-    &:hover {
-      filter: grayscale(40%);
-    }
-  }
-}
-.content-pops-left {
-  .content-pops-global(flex-start);
-  &::before {
-    .content-pops-after-global();
-    border-left-color: transparent;
-  }
-  &-content {
-    .content-pops-content-global();
-    text-align: left;
-    &:hover {
-      filter: grayscale(40%);
-    }
-  }
-}
-</style>
+ 

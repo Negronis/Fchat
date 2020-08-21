@@ -1,0 +1,86 @@
+// 全局通用参数
+.content-pops-global (@justify:flex-end) {
+   vertical-align: middle;
+   text-align: left;
+   width: 100%;
+   position: relative;
+   display: flex;
+   justify-content: @justify;
+   pre{
+     padding:0;
+     margin:0;
+     white-space: pre-wrap;
+     word-wrap: break-word;
+     word-break: break-all;
+   }
+ }
+ .content-pops-after-global {
+   content: "";
+   width: 0px;
+   height: 0px;
+   border: 5px solid #6aea9e;
+   border-top-color: transparent;
+   border-bottom-color: transparent;
+   position: relative;
+   top: 10px;
+ }
+ .content-pops-content-global {
+   font-size: 15px;
+   border-radius: 5px;
+   padding: 5px;
+   background: #6aea9e;
+   line-height: 30px; 
+ }
+ .content-pops-all {
+   display: flex;
+   margin: 20px;
+   &-img-loading{
+     background:rgba(0,0,0,.5);
+     width:270px;
+     height:270px;
+     line-height:310px;
+   }
+ }
+ .content-avatar {
+   width: 50px;
+   height: 40px;
+   vertical-align: middle;
+ }
+ 
+ .content-pops-right {
+   .content-pops-global();
+   &::after {
+     .content-pops-after-global();
+     border-right-color: transparent;
+   }
+ 
+   &-content {
+     .content-pops-content-global();
+     text-align: left;
+     &:hover {
+       filter: grayscale(40%);
+     }
+     &-audio{
+      width:90px;
+      text-align: right;
+     }
+   } 
+ }
+ .content-pops-left {
+   .content-pops-global(flex-start);
+   &::before {
+     .content-pops-after-global();
+     border-left-color: transparent;
+   }
+   &-content {
+     .content-pops-content-global();
+     text-align: left;
+     &:hover {
+       filter: grayscale(40%);
+     }
+     &-audio{
+      width:90px;
+      text-align: left;
+     }
+   }
+ } 

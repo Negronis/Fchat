@@ -3,6 +3,7 @@
     <FonlineConsultation
       @send="sendMsg"
       @sendImg="sendImg"
+      @sendVoice="senVoice"
     ></FonlineConsultation>
   </div>
 </template>
@@ -17,6 +18,8 @@ export default {
     };
   },
   created() {
+    // 挂载音频文件 
+    this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign",true);
     // 进入页面获取服务器数据
     getMessage().then((res) => { 
       setTimeout(()=>{ 
@@ -29,8 +32,8 @@ export default {
   },
   methods: {
     // 模拟一个复读机
-    sendImg(e) { 
-      e.then((sendObj) => {
+    sendImg(cb) { 
+      cb.then((sendObj) => {
         console.log('图片加载完成');
         this.$FChat.loading();
         sendMessage(sendObj).then((res) => { 
@@ -51,12 +54,15 @@ export default {
         alert(err);
       });
     },
-    sendMsg(e) {
+    sendMsg(msgObject) {
       this.$FChat.loading();
-      sendMessage(e).then((res) => {
+      sendMessage(msgObject).then((res) => {
         if (res.data) {
+          // 经过服务器请求后决定双方发送消息
+          // 己方发送
+          this.$FChat.sendMessage(msgObject);
           this.$FChat.cancelLoading();
-          this.$FChat.sendMessage(e);
+          // 服务器返回 - 格式拼接
           let { content, pos, type } = res.data; 
             this.$FChat.sendMessage({
               content: content,
@@ -66,6 +72,9 @@ export default {
         }
       });
     },
+    senVoice(e){
+      console.log(e);
+    }
   },
 };
 </script>

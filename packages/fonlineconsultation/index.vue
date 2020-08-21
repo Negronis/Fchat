@@ -1,5 +1,5 @@
 <template>
-  <div class="fonlineconsultation-outer-div" v-bind="Height" >
+  <div id="fonlineconsultation" class="fonlineconsultation-outer-div" v-bind="Height" >
     <!-- header -->
     <div id="onlineHeader" class="online-header-all" ref="onlineHeader">
       <div class="online-header-all-left">功能1</div>
@@ -8,22 +8,26 @@
     </div>
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
-      <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']"></pops>
+      <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']" :duration="item['duration'] || '未知'"></pops>
     </div>
     <!-- input -->
     <div class='online-input-content' id='onlineInput' ref='onlineInput'>
          <div class='online-input-content-lefticon'> 
            <!-- left  -->
-           <slot name="leftIcon">
-            <span :class="leftIcon" :style="{fontSize:leftIconSize+'px',color:leftIconColor}" @click="leftHandlerClick"></span>
+           <slot name="leftIcon"> 
+            <span v-if="!isVoice"  :class="leftIcon" :style="{fontSize:leftIconSize+'px',color:leftIconColor}" @click="leftHandlerClick"></span>
+            <span v-if="isVoice"  :class="leftIconChange" :style="{fontSize:leftIconSize+'px',color:leftIconColor}" @click="leftHandlerClick"></span> 
            </slot>
           </div>
-         <div class='online-input-content-centerInput'>
+         <div class='online-input-content-centerInput' >
            <!-- center -->
             <slot name="centerText">
-              <textarea @blur="controlHeight('blur')" @focus="controlHeight('focus')" id="msgInput" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
-            </slot>
-         </div>
+                <textarea  v-if="!isVoice" @blur="controlHeight('blur')" @focus="controlHeight('focus')" id="msgInput" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
+                <div   v-if="isVoice"  class="online-input-content-centerInput-voice" :style="{height:isIOS == false ? '21px' : '',marginBottom:isIOS == true? '2px' : '', marginTop:isIOS == true ? '2px' : ''}">
+                    <button @touchstart="startVoice" @touchmove="moveVoice" @touchend="endVoice" :style="{lineHeight:isIOS == true ? '20px' : ''}">{{voiceMsg}}</button>
+                </div>
+            </slot> 
+         </div> 
          <div class='online-input-content-righticon'>
            <!-- right -->
             <slot name="rightIcon">
@@ -38,6 +42,11 @@
         </div>
       </slot> 
       <input type="file" id="sendImg" style="display:none">
+      <div class="voice-pop" v-if="startVoiceBoolean">
+          <img v-if="voiceContent == '正在录音....'" src="@/assets/voice/voice.png" alt="" width="50px">
+          <img v-if="voiceContent != '正在录音....'" src="@/assets/voice/cancel.png" width="50px" alt="">
+          <div class="voice-pop-contant">{{voiceContent}}</div>
+      </div>
   </div>
 </template>
 
@@ -70,6 +79,14 @@ export default {
       controlRows:1,  
       //content 
       innerHeight:0, //保存content消息框响应高度
+      isVoice:false, //是否为音频
+      voiceMsg:"按住说话", //音频按钮文字
+      touchTimer:null,  //长按用的定时器
+      voiceContent:"正在录音....",  //录音文字
+      voiceStartX:0,//录音开始的位置记录
+      voiceStartY:0,
+      isCancel:false, //用来判断是否需要取消录音
+      startVoiceBoolean:false , //开始录音 -- 显示灰色图案
     };
   },
   computed: {
@@ -82,113 +99,14 @@ export default {
     // 动态的消息列表
     MessageArray(){ 
       return this.MessageArrays;
+    },
+    isIOS(){  
+      return navigator.userAgent.indexOf('iPhone') != -1;
     }
   },  
-  created(){
-     this.fheight = this.height;
+  created(){ 
+    
   }
 };
 </script>
-
-<style lang="less">
-body {
-  margin: 0;
-  padding: 0; 
-  position: relative;
-}  
-.fonlineconsultation-outer-div {
-  box-sizing: border-box; 
-}
-// header
-.online-header-all { 
-  box-sizing: border-box;
-  display: flex;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;  
-  background-image: linear-gradient(
-    to right,
-    #eaeaea 0%,
-    #fff 50%,
-    #eaeaea 100%
-  );
-  &-left {
-    flex: 2;
-  }
-  &-center {
-    flex: 10;
-  }
-  &-right {
-    flex: 2;
-  }
-}
-// content
-.online-content-all {
-  box-sizing: border-box;
-  overflow-y: scroll;  
-}
-// input
-.online-input-content{   
-  width:100%;
-  background-image:linear-gradient(to right , #EAEAEA  0% , #fff 50%, #EAEAEA 100%);
-  box-sizing: border-box;
-  display:flex; 
-  &-lefticon{
-      text-align: center;
-      flex:2;  
-      position: relative;
-      left:0px;
-      span{
-        position: absolute;
-        bottom:18px;
-      }
-  }
-  &-righticon{
-      flex:3;
-      text-align: center; 
-      position: relative;
-      right:0px;
-      span{
-        position: absolute;
-        bottom:18px; 
-        &:first-child{ 
-            left:13px;
-        }
-        &:last-child{
-            right:15px;
-        }
-      }
-  }
-  &-centerInput{
-      flex:8;
-      padding:5px; 
-      textarea{ 
-        width:100%;
-        padding:8px 1%;
-        border-radius:5px;
-        outline: none; 
-        font-size:18px;
-        border:1px solid #dcdee2;
-        resize:none;
-      }
-  }  
-}
-.MessageLoading{ 
-  width:100%; 
-  position: fixed;
-  z-index:1000;
-  top:0px; 
-  box-sizing: border-box;
-  background:rgba(0,0,0,.5);
-  &-Img{
-     position: absolute;
-      z-index:1000;
-      top:0px;
-      left:0px;
-      bottom:0px;
-      right:0px;
-      margin:auto;
-  }
-}
-</style>
+ 

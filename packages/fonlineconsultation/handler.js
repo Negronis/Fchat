@@ -1,13 +1,51 @@
+import Vue from 'vue'; 
 class FChat {
-   constructor(message,loadingState,maxSize,onlyImage) {
+   constructor(message,loadingState,maxSize,onlyImg) {
+      // 消息列表
       this.message = message;
+      // loading状态
       this.loadingState = loadingState || false ;
+      //图片最大多少mb
       this.maxSize = maxSize || 2 ;
-      this.onlyImage = onlyImage || false;
+      //是否只能发图片
+      this.onlyImg = onlyImg || false;
+      //Toast单例
+      this.ToastDiv = null;
+      // 音频错误状态记录
+      this.voiceState = false;  
+   } 
+   // 可由用户选择是否开启音频
+   openVoice(url,isPromise){
+      const that = this;
+      // 如果挂载音频则帮忙授权
+      if(!Vue.prototype.$RecordApp){
+         Promise.all([
+            import ('../../packages/recorder')
+         ]).then(function(){
+            console.log('音频插件以挂载');
+            if(!isPromise) return ;
+            Vue.prototype.$RecordApp.RequestPermission(
+                  // 用户已经授权的回调
+               function () { 
+                  that.createToast('音频授权成功。')
+               },
+               //用户拒绝未授权或不支持
+               function (msg, isUserNotAllow) {  
+                  that.createToast(isUserNotAllow ? "授权出现问题" : "音频出现故障" + '，原因是：'+msg);
+                  that.voiceState = true;
+               }
+            );
+         })
+         if(url){
+            console.log(window);
+            window.PageSet_RecordAppWxApi = url;
+         }
+      }
    }
+   // 参数设定
    setConfig(key,value,config){ 
-      if(!config){
-         if(this[key]){
+      if(!config){ 
+         if(this[key] !== null || this[key] !== undefined){
             this[key] = value; 
          }else{
             throw Error('参数错误')
@@ -18,8 +56,7 @@ class FChat {
                this[i] = config[i];
             }
          }
-      }
-
+      } 
    }
    // Loading状态
    loading(loadingId,time,texDisabled = false){
@@ -95,7 +132,7 @@ class FChat {
       }
       MessageObject['content'] = msg;
       MessageObject['type'] = "message",
-         MessageObject['pos'] = pos || "right";
+      MessageObject['pos'] = pos || "right";
       return MessageObject;
    }
    // 图片消息
@@ -147,6 +184,93 @@ class FChat {
          }, 0);
       }, 0)
    }
-
+   // 发送音频
+   sendVoice(content,duration,pos){
+      MessageObject['content'] = content;
+      MessageObject['type'] = "audio",
+      MessageObject['pos'] = pos || "right";
+      MessageObject['duration'] = duration;
+      return MessageObject;
+   }
+   // 播放音频
+   playVoice(src,duration){
+      console.log(duration);
+      this.createToast('正在播放音频 ...');
+   }
+   // 开始录音
+   startVoice(){
+      Vue.prototype.$RecordApp.Start(
+         { 
+           type: "mp3",
+           sampleRate: 16000,
+           bitRate: 16,  
+           onProcess: function ( buffers,  powerLevel,  bufferDuration,    bufferSampleRate,  newBufferIdx,  asyncEnd  ) {
+             console.log(
+               buffers, powerLevel,  bufferDuration,   bufferSampleRate, newBufferIdx, asyncEnd
+             ); 
+           },
+         }, 
+         function(){
+           console.log('开始录音 ....');
+         },
+         function (msg) {
+           console.log("开始录音失败：" + msg);
+         }); 
+   }
+   // 暂停录音
+   pauseVoice(){
+      let that = this;
+      Vue.prototype.$RecordApp.Stop(
+         function (blob, duration) { 
+           //到达指定条件停止录音和清理资源
+           console.log(
+             blob,  (window.URL || window.webkitURL).createObjectURL(blob),
+             "时长:" + duration + "ms"
+           ); 
+           //已经拿到blob文件对象想干嘛就干嘛：立即播放、上传
+           let fileBlob =  (window.URL || window.webkitURL).createObjectURL(blob);  
+           var voiceObject = that.sendVoice(fileBlob,duration);
+           return voiceObject;
+         },
+         function (msg) {
+           console.log("录音失败:" + msg); 
+         } );
+   }
+   //创建提示框
+   createToast(msg,timer){ 
+      var that = this; 
+      if(!this.ToastDiv){
+         var div = document.createElement('div');
+         div.id = 'FChatToast';
+         div.style.cssText = `
+            width:100%;
+            line-height:30px;
+            background:rgba(0,0,0,.5);
+            position:fixed;
+            left:0;
+            font-size:16px;
+            text-indent:10px;
+            color:#fff; 
+            transition:.5s linear all;
+            z-index:10;
+            overflow:hidden;
+            height:0px;
+            top:${document.getElementById('onlineHeader').clientHeight}px;
+         `
+         div.innerHTML = msg;
+         document.body.appendChild(div);
+         this.ToastDiv = div;
+         setTimeout(function(){
+            that.ToastDiv.style.height = 30 +'px';
+         },100)
+      }else{
+         this.ToastDiv.style.height = 30 + 'px';
+         this.ToastDiv.innerHTML = msg;
+      }
+      setTimeout(function(){
+         console.log('定时器执行');
+         that.ToastDiv.style.height = 0 + 'px';
+      },timer || 3000)
+   }
 }
 export default new FChat([]);

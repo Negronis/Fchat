@@ -5,17 +5,17 @@ import router from  './router';
 //低版本浏览器兼容es6 
 import "babel-polyfill";
 
-// loading icon
-import '../examples/assets/font/iconfont.css';
+import '../packages/styles/index.less';
 import fonlineconsulatation from '../packages';  
 import FChat from '../packages';  
-
-//import Vconsole
-import Vconsole from 'vconsole';
-const vconsole = new Vconsole();
-
+ 
 Vue.config.productionTip = false;
+
+import Vconsole from 'vconsole';
+const vconsole = new Vconsole;
 Vue.use(vconsole);   
+
+
 Vue.use(fonlineconsulatation);  
 Vue.use(FChat);  
 new Vue ({

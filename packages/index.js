@@ -1,5 +1,3 @@
-// loading icon
-import '../examples/assets/font/iconfont.css';
 import { fonlineconsultation, pops, FChat } from './fonlineconsultation';
 const components = [
    fonlineconsultation, pops
