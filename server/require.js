@@ -8,23 +8,19 @@ var jsonParser = bodyParser.json()
 // 创建 application/x-www-form-urlencoded 解析器 
 router.get('/getMessage', (req, res) => {
    let sendData = [
-      { "content": "雾里看花解放啦空数据阿斯利康", "type": "message", "pos": "right" },
-      { "content": "雾里看花解放啦空数据阿斯利康", "type": "message", "pos": "left" },
-      { "content": "未结案维拉克斯福建烤老鼠的", "type": "message", "pos": "right" },
-      { "content": "未结案维拉克斯福建烤老鼠的", "type": "message", "pos": "left" },
-      { "content": "热武器奥若群无若群w", "type": "message", "pos": "right" }
-      , { "content": "热武器奥若群无若群w", "type": "message", "pos": "left" },
-      { "content": "三顿饭拉克丝都费劲拉开始搭建发拉丝", "type": "message", "pos": "right" },
-      { "content": "三顿饭拉克丝都费劲拉开始搭建发拉丝", "type": "message", "pos": "left" },
-      { "content": "阿萨德阿萨德", "type": "message", "pos": "right" },
+      { "content": "你好", "type": "message", "pos": "right" },
+      { "content": "你好吗？", "type": "message", "pos": "left" },
+      { "content": "好你妈？", "type": "message", "pos": "right" },
+      { "content": "好你妈！", "type": "message", "pos": "left" },
+      { "content": "你妈没了？", "type": "message", "pos": "right" }
+      , { "content": "你妈没了！", "type": "message", "pos": "left" },
+      { "content": "来根华子？", "type": "message", "pos": "right" },
+      { "content": "不好意老弟，我都抽95，华子那玩意咳shou！", "type": "message", "pos": "left" },
+      { "content": "给你牛逼坏了嗷", "type": "message", "pos": "right" },
       { "content": "http://192.168.1.4:8080/img.png", "type": "image", "pos": "right" },
-      { "content": "阿萨德阿萨德", "type": "message", "pos": "left" },
-      { "content": "阿萨德", "type": "message", "pos": "right" },
-      { "content": "阿萨德", "type": "message", "pos": "left" },
-      { "content": "", "type": "audio", "pos": "left" ,"duration":1},
-      { "content": "", "type": "audio", "pos": "right" }
-
-
+      { "content": "草你妈的", "type": "message", "pos": "left" },
+      { "content": "你瞅你这个素质", "type": "message", "pos": "right" },
+      { "content": "不服碰一下子？", "type": "message", "pos": "left" },
    ];
    res.json(sendData);
 })
@@ -33,6 +29,7 @@ router.post('/sendMessage', jsonParser, (req, res) => {
    var { type } = req.body;
    if (type === 'message') {
       if (req.body) sendData = (req.body);
+      sendData['content'] ="你说啥？" + sendData['content'] ;
       res.json(sendData);
    }
    if (type === 'image') {
@@ -48,7 +45,7 @@ router.post('/sendMessage', jsonParser, (req, res) => {
                   throw err;
                } else {
                   sendData = req.body;
-                  sendData['content'] = 'http://192.168.1.4:8080/img.png';
+                  sendData['content'] = 'http://192.168.1.4:8082/img.png';
                   res.json(sendData)
                }
             })
@@ -68,12 +65,19 @@ router.post('/sendMessage', jsonParser, (req, res) => {
                   throw err;
                } else {
                   sendData = req.body;
-                  sendData['content'] = 'http://192.168.1.4:8080/video.mp4';
+                  sendData['content'] = 'http://192.168.1.4:8082/video.mp4';
                   res.json(sendData)
                }
             })
          }
       })
+   }
+   if(type == 'audio'){
+      // let data = fs.readFileSync('./voice/ebf3b0c7b1c015f70115a8d869127c010829f3ff'+'.amr' , 'base64'); 
+      // buffer转化为base64编码 
+      sendData = req.body;
+      sendData['content'] = 'http://192.168.1.4:8082/mp3/ebf3b0c7b1c015f70115a8d869127c010829f3ff.mp3';
+      res.json(sendData);
    }
 });
 // 微信接口

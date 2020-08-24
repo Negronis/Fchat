@@ -13,12 +13,17 @@ class FChat {
       this.ToastDiv = null;
       // 音频错误状态记录
       this.voiceState = false;  
+      //audio标签单例
+      this.audioObj = "";
    } 
    // 可由用户选择是否开启音频
    openVoice(url,isPromise){
       const that = this;
       // 如果挂载音频则帮忙授权
-      if(!Vue.prototype.$RecordApp){
+      if(!Vue.prototype.$RecordApp){ 
+         setTimeout(function(){
+            that.createToast('正在加载音频插件，请稍等');
+         })
          Promise.all([
             import ('../../packages/recorder')
          ]).then(function(){
@@ -27,12 +32,12 @@ class FChat {
             Vue.prototype.$RecordApp.RequestPermission(
                   // 用户已经授权的回调
                function () { 
-                  that.createToast('音频授权成功。')
+                  that.createToast('音频授权成功。') 
                },
                //用户拒绝未授权或不支持
                function (msg, isUserNotAllow) {  
                   that.createToast(isUserNotAllow ? "授权出现问题" : "音频出现故障" + '，原因是：'+msg);
-                  that.voiceState = true;
+                  that.voiceState = true; 
                }
             );
          })
@@ -59,19 +64,21 @@ class FChat {
       } 
    }
    // Loading状态
-   loading(loadingId,time,texDisabled = false){
+   loading(time, loadingId, texDisabled = false){
       let tex = document.getElementById('msgInput');
       let loadingDiv = document.getElementById(loadingId || 'messageLoading');
       loadingDiv.style.display = 'block';
       this.loadingState = true;
-      if(texDisabled){
+      if(tex && texDisabled){
          tex.disabled = true;
       }
       // 超时处理
       setTimeout(()=>{
          loadingDiv.style.display = 'none';
          this.loadingState = false;
-         tex.disabled = false;
+         if(tex){
+            tex.disabled = false;
+         }
          return new Promise((resolve,reject)=>{
             resolve('请求超时');
          })
@@ -87,7 +94,9 @@ class FChat {
       loadingDiv.style.display = 'none';
       this.loadingState = false;
       let tex = document.getElementById('msgInput');
-      tex.disabled = false;
+      if(tex && tex.disabled){
+         tex.disabled = false;
+      }
    }
    // 滚动到消息最底
    scrollMessage() {
@@ -123,10 +132,10 @@ class FChat {
    }
    // 普通消息
    addMessage(msg, pos) {
-      let MessageObject = {};
+      var MessageObject = {};
       // 对于链接的处理
-      let HttpReg = /((http|https|ftp)(:\/\/)([a-z]|[0-9]|[\.]|[:])+)/ig
-      let link = msg.match(HttpReg);
+      var HttpReg = /((http|https|ftp)(:\/\/)([a-z]|[0-9]|[\.]|[:])+)/ig
+      var link = msg.match(HttpReg);
       if (link) {
          msg = msg.replace(HttpReg, `<a href=${link[0]}>${link[0]}</a>`);
       }
@@ -138,21 +147,22 @@ class FChat {
    // 图片消息
    addImage(pos) { 
       return new Promise((resolve, reject) => {
-         let MessageObject = {};
-         let imgInput = document.getElementById('sendImg');
+         var MessageObject = {};
+         var imgInput = document.getElementById('sendImg');
          // 清空value -- 修复无法重复发送同一张图片
          imgInput.value = "";
          imgInput.click();
          imgInput.onchange = (e) => {
-            let files = e.target.files, file;
+            var files = e.target.files, file;
             if (files && files.length != 0) {
                file = files[0];
-               let { type, size } = file; 
+               var { type, size } = file; 
+               console.log(type , file , size);
                size = (size / 1024).toFixed(2) / 1000; 
-               let fileReader = new FileReader();
+               var fileReader = new FileReader();
                fileReader.readAsDataURL(file);
-               fileReader.onload = (event) => { 
-                  const result = event.target.result;
+               fileReader.onload = function(event){  
+                  const result = this.result;
                   MessageObject['content'] = result;
                   if (type.indexOf('image') != -1) {
                      MessageObject['type'] = "image";  
@@ -173,6 +183,7 @@ class FChat {
          }
       })
    }
+   // 消息发送
    sendMessage(FchatObj) {
       this.message.push(FchatObj);
       //   自动滚动到底
@@ -180,12 +191,15 @@ class FChat {
          this.scrollMessage();
          // 消息清空
          setTimeout(() => {
-            this.delMessage();
+            if(FchatObj['type'] != 'audio' && FchatObj['type'] != 'video' && FchatObj['type'] != 'image'){
+               this.delMessage();
+            }
          }, 0);
       }, 0)
    }
    // 发送音频
-   sendVoice(content,duration,pos){
+   sendVoice(content,duration,pos){ 
+      var MessageObject = {};
       MessageObject['content'] = content;
       MessageObject['type'] = "audio",
       MessageObject['pos'] = pos || "right";
@@ -193,48 +207,67 @@ class FChat {
       return MessageObject;
    }
    // 播放音频
-   playVoice(src,duration){
-      console.log(duration);
-      this.createToast('正在播放音频 ...');
+   playVoice(src,duration){ 
+      if(this.audioObj == "") {
+         var audio = document.createElement('audio');
+         audio.src = src;
+         document.body.appendChild(audio); 
+         this.audioObj = audio;
+      
+      }else{
+         this.audioObj.src = src;
+      }
+      this.audioObj.play();
+      this.createToast('正在播放音频 ...',duration * 1000);
    }
    // 开始录音
    startVoice(){
-      Vue.prototype.$RecordApp.Start(
-         { 
-           type: "mp3",
-           sampleRate: 16000,
-           bitRate: 16,  
-           onProcess: function ( buffers,  powerLevel,  bufferDuration,    bufferSampleRate,  newBufferIdx,  asyncEnd  ) {
-             console.log(
-               buffers, powerLevel,  bufferDuration,   bufferSampleRate, newBufferIdx, asyncEnd
-             ); 
-           },
-         }, 
-         function(){
-           console.log('开始录音 ....');
-         },
-         function (msg) {
-           console.log("开始录音失败：" + msg);
-         }); 
+      return new Promise(function(resolve,reject){
+         Vue.prototype.$RecordApp.Start(
+            { 
+            type: "mp3",
+            sampleRate: 16000,
+            bitRate: 16,  
+            onProcess: function ( buffers,  powerLevel,  bufferDuration,    bufferSampleRate,  newBufferIdx,  asyncEnd  ) {
+               console.log(
+                  buffers, powerLevel,  bufferDuration,   bufferSampleRate, newBufferIdx, asyncEnd
+               ); 
+            },
+            }, 
+            function(){
+            resolve();
+            console.log('开始录音 ....');
+            },
+            function (msg) {
+               reject("开始录音失败：" + msg)
+               console.log("开始录音失败：" + msg);
+            }); 
+      })
    }
    // 暂停录音
    pauseVoice(){
-      let that = this;
+      let that = this; 
+      return new Promise(function(resolve,reject){
       Vue.prototype.$RecordApp.Stop(
-         function (blob, duration) { 
+         function (blob, duration) {
            //到达指定条件停止录音和清理资源
            console.log(
              blob,  (window.URL || window.webkitURL).createObjectURL(blob),
              "时长:" + duration + "ms"
-           ); 
-           //已经拿到blob文件对象想干嘛就干嘛：立即播放、上传
+           );  
            let fileBlob =  (window.URL || window.webkitURL).createObjectURL(blob);  
+            // 暂停后发送至服务器，然后发出语音消息
+            if(duration){
+               duration = Math.ceil(duration / 1000);
+            }  
            var voiceObject = that.sendVoice(fileBlob,duration);
-           return voiceObject;
+           resolve(voiceObject);
          },
          function (msg) {
-           console.log("录音失败:" + msg); 
-         } );
+           console.log("录音失败:" + msg);  
+           reject("录音失败:" + msg);
+         });
+      })
    }
    //创建提示框
    createToast(msg,timer){ 
@@ -267,8 +300,7 @@ class FChat {
          this.ToastDiv.style.height = 30 + 'px';
          this.ToastDiv.innerHTML = msg;
       }
-      setTimeout(function(){
-         console.log('定时器执行');
+      setTimeout(function(){ 
          that.ToastDiv.style.height = 0 + 'px';
       },timer || 3000)
    }

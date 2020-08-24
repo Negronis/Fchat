@@ -114,6 +114,8 @@ function clearTokenATicket(fn,args){
    fs.unlinkSync(ticket); 
    fn.apply(this, ...args);
 } 
+const amrToMp3 = require('amrToMp3');
+
 // 获取音频临时素材
 function getAudio(param, res) { 
    console.log('尝试获取微信端临时素材 ....' , param);
@@ -129,13 +131,14 @@ function getAudio(param, res) {
             responseType:'arraybuffer'
          }
       ).then(response => {   
-         let {  errcode, errmsg } = response['data']; 
-         if (errcode) {
+         let {  errcode, errmsg } = response['data'];  
+         if (errcode || response['headers']['logicret'] == 42001) {
             console.log('token疑似过期' + errcode , errmsg); 
             clearTokenATicket(getAudio , [media_id , res]);
             return;
          } else {  
             let type = response['headers']['content-type'] ;  
+            console.log(response['headers']);
             let duration = 0;  
             let data = response['data']; 
             // arm存储
@@ -150,6 +153,7 @@ function getAudio(param, res) {
                let data = fs.readFileSync('./voice/'+fileName+'.amr' , 'base64'); 
                // buffer转化为base64编码
                let bufferData = data.toString('base64'); 
+               amrToMp3('./voice/'+'ebf3b0c7b1c015f70115a8d869127c010829f3ff' + ".amr",'./mp3/').then(()=>{})
                res.json(
                   { 
                      mime:type,
@@ -159,6 +163,8 @@ function getAudio(param, res) {
                ); 
             });  
          }
+      }).catch(err=>{
+         console.log(err);
       })
    })
 }

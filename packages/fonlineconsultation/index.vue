@@ -47,6 +47,11 @@
           <img v-if="voiceContent != '正在录音....'" src="@/assets/voice/cancel.png" width="50px" alt="">
           <div class="voice-pop-contant">{{voiceContent}}</div>
       </div>
+      <div class="voice-pop" v-if="voiceStartLoading"> 
+          <img  src="@/assets/svg/oval.svg" width="50px" alt="">
+          <div class="voice-pop-contant"><br>Loading</div>
+      </div>
+
   </div>
 </template>
 
@@ -87,6 +92,7 @@ export default {
       voiceStartY:0,
       isCancel:false, //用来判断是否需要取消录音
       startVoiceBoolean:false , //开始录音 -- 显示灰色图案
+      voiceStartLoading:false,  //录音开始前的loading状态
     };
   },
   computed: {

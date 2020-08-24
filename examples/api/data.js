@@ -1,5 +1,5 @@
 import axios from 'axios';
-const serverUrl = "http://fepic.natapp4.cc/api";
+const serverUrl = "https://fepic.natapp4.cc/api";
 export let getMessage = () => {
    return axios.get(serverUrl + '/getMessage');
 }

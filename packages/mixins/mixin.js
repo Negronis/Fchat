@@ -1,5 +1,5 @@
 //Fchat 
-import FChat from '../fonlineconsultation/handler';
+import FChat from '../fonlineconsultation/handler'; 
 export default {
     data() {
         return {
@@ -195,7 +195,7 @@ export default {
                 this.controlRows = 1;
             }
         },
-        //默认录音方法 方法可定 通过this.$ref.emit()调用
+        //默认录音方法
         leftHandlerClick() {
             this.isVoice = !this.isVoice;
         },
@@ -211,36 +211,66 @@ export default {
                     this.$emit('send', FChat.addMessage(tex.value));
                 }
             }
-        },
-        //声音方面
+        }, 
+        /**
+         * 长按开始录音
+         * 同时设定一些值
+         */
         startVoice(e) { 
             var that = this;
-            clearTimeout(this.touchTimer);
-            // 禁止页面选中 
-            document.getElementById(this.preventId).style.userSelect = `none`; 
-            // -webkit-touch-callout:none;
-            // -webkit-user-select:none;
-            // -khtml-user-select:none;
-            // -moz-user-select:none;
-            // -ms-user-select:none;
-            // user-select:none;
-            // 阻止页面滚动
-            this.controlScroll(document.body, false);
+            clearTimeout(this.touchTimer); 
+            /**
+             * 阻止页面滚动
+             * 阻止文字选中
+             * 初始化参数
+             */
+            document.getElementById(this.preventId).className = "fonlineconsultation-outer-div noSelect"; 
+            that.controlScroll(document.body, false); 
             this.isCancel = false;
             this.touchTimer = 0;
-            this.touchTimer = setTimeout(function () {
-                console.log('长按执行');
-                that.voiceContent = "正在录音...."
-                that.voiceMsg = "松开结束";
-                that.startVoiceBoolean = true;
-                FChat.startVoice();
+            that.voiceStartLoading = true;
+            this.touchTimer = setTimeout(function () { 
+                FChat.startVoice().then(function(){ 
+                    /** 
+                     * 去掉loading状态
+                     * 修改文字
+                     * 修改按钮文字
+                     * 将开启录音状态改为true,调出模态框
+                    */
+                    that.voiceStartLoading = false;
+                    that.voiceContent = "正在录音...."
+                    that.voiceMsg = "松开结束";
+                    that.startVoiceBoolean = true; 
+                }).catch(function(err){
+                    FChat.createToast(err);
+                    that.endInit();
+                    // return ;
+                });
             }, 300);
             // 记录开始的位置
             this.voiceStartX= e['touches']['0']['pageX'];
             this.voiceStartY  =e['touches']['0']['pageY'];
         }, 
-        moveVoice(e) {   
-            // 清空一下定时器
+        /** 
+         * 根据手指移动判定方向
+         * 上滑取消功能
+         *             if ( Math.abs(X) > Math.abs(Y) && X > 0 ) {
+                            //从左到右
+                        }
+                        else if ( Math.abs(X) > Math.abs(Y) && X < 0 ) {
+                            //从右到左
+                        }
+                        else if ( Math.abs(Y) > Math.abs(X) && Y > 0) {
+                            //从上到下 
+                        }
+                        else if ( Math.abs(Y) > Math.abs(X) && Y < 0 ) {
+                            //从下到上 
+                        }
+                        else{ 
+
+                        } 
+        */
+        moveVoice(e) {    
             clearTimeout(this.touchTimer);
             var pageX  = e['touches']['0']['pageX'];
             var pageY  = e['touches']['0']['pageY']; 
@@ -248,75 +278,92 @@ export default {
             var X = pageX - this.voiceStartX;
             var Y = pageY - this.voiceStartY; 
             function events(msg , isCancel){
-                if(this.touchTimer!=0){
-                    //这里写要执行的内容（尤如onclick事件） 
+                if(this.touchTimer!=0){ 
                       this.voiceContent = msg;
                       this.isCancel = isCancel;
                   }
             } 
-            if ( Math.abs(Y) > Math.abs(X)+50 && Y < 0 ) {
-                //   从下到上 
+            if ( Math.abs(Y) > Math.abs(X)+50 && Y < 0 ) { 
                 events.call(this, "上滑取消录音" , true); 
             }else{
                 events.call(this, "正在录音...." , false);
             }
-            // if ( Math.abs(X) > Math.abs(Y) && X > 0 ) {
-            //     //    从左到右
-            // }
-            // else if ( Math.abs(X) > Math.abs(Y) && X < 0 ) {
-            //     // 从右到左
-            // }
-            // else if ( Math.abs(Y) > Math.abs(X) && Y > 0) {
-            //     // 从上到下 
-            // }
-            // else if ( Math.abs(Y) > Math.abs(X) && Y < 0 ) {
-            //     //   从下到上 
-            // }
-            // else{ 
-            // } 
         },
-        endVoice() { 
+        // 结束状态 初始化 
+        endInit(){
+            var that = this; 
             clearTimeout(this.touchTimer);//清除定时器
-            // 允许页面滚动
-            this.controlScroll(document.body, true);
-            var that = this;
-            setTimeout(function(){
+            setTimeout(function(){ 
+                /**
+                 * 关闭图片
+                 * 重置按钮文字
+                 * 允许滚动
+                 * 允许页面文字选中
+                 * 重置定时器
+                 */
                 that.startVoiceBoolean = false;
-                that.voiceMsg = "开始录音";
+                that.voiceMsg = "开始录音"; 
+                that.controlScroll(document.body, true); 
+                document.getElementById(that.preventId).className = "fonlineconsultation-outer-div";
+                that.touchTimer = 0;
+                that.voiceStartLoading = false; 
             },0)
-            this.touchTimer = 0;
-            if(this.isCancel){
-                console.log('取消录音');
+        },
+        /** 
+         * 取消录音情况
+         * 服务器成功返回情况
+         * 服务器返回不成功的情况
+        */
+        endVoice() {
+            var that = this; 
+            that.endInit(); 
+            if(that.isCancel){ 
+                that.$RecordApp.Stop();
+                console.log('取消录音'); 
             }else{
-                var sendObject = FChat.pauseVoice(); 
-                this.$emit('sendVoice',sendObject);
-            }
-            document.getElementById(this.preventId).style.userSelect = "all";
-            console.log('手指松开')
+                FChat.loading();
+                setTimeout(function(){
+                    FChat.pauseVoice().then(function(res){
+                        that.endInit(); 
+                        FChat.cancelLoading();
+                        that.$emit('sendVoice',res);  
+                    }).catch(function(err){
+                        FChat.cancelLoading();
+                        FChat.createToast(err); 
+                        that.endInit(); 
+                    })
+                },500) 
+            }  
         }
     },
-    //事件绑定/高度计算
+    /** 
+     * 事件绑定和高度计算
+     * 绑定enter发送
+     * 监听页面高度变化 - 安卓收起输入法响应
+    */
     mounted() {
         // content
         this.$nextTick(() => {
             this.authorHeight =
                 (this.$refs.onlineHeader.offsetHeight || 0) +
                 (this.$refs.onlineInput.offsetHeight || 0);
-        });
-        //绑定enter发送
+                this.loadingHeight = window.innerHeight + 'px';
+        }); 
         window.addEventListener('keydown', (e) => {
             let { keyCode } = e;
             if (keyCode === 13) {
                 this.messageHandler();
             }
-        })
-        // 监听页面高度变化 - 安卓收起输入法响应
+        }) 
         window.addEventListener('resize', () => {
             this.changContentHeight(window.innerHeight);
         });
     },
+    /** 
+     * 监听行数变化
+     * 响应高度
+    */
     watch: {
-        // 监听行数变化 响应高度
         controlRows(val) {
             setTimeout(() => {
                 this.changContentHeight(this.innerHeight);
