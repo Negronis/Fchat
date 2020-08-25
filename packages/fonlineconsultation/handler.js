@@ -14,9 +14,7 @@ class FChat {
       // 音频错误状态记录
       this.voiceState = false;  
       //audio标签单例
-      this.audioObj = "";
-      //用户开启音频?
-      this.isOpenVoice = false;
+      this.audioObj = ""; 
    } 
    // 可由用户选择是否开启音频
    openVoice(url,isPromise){
@@ -29,8 +27,7 @@ class FChat {
          Promise.all([
             import ('../../packages/recorder')
          ]).then(function(){
-            console.log('音频插件以挂载');
-            that.isOpenVoice = true;
+            console.log('音频插件以挂载'); 
             if(!isPromise) return ;
             Vue.prototype.$RecordApp.RequestPermission(
                   // 用户已经授权的回调

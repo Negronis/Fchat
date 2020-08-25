@@ -195,8 +195,8 @@ export default {
             }
         },
         //默认录音方法
-        leftHandlerClick() {
-            if(FChat.isOpenVoice){
+        leftHandlerClick() { 
+            if(this.$RecordApp){
                 this.isVoice = !this.isVoice;
             }else{
                 FChat.createToast('您未开启音频加载，无法使用音频');

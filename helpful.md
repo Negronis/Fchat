@@ -25,8 +25,8 @@ npm i fonlineconsultation
 <font color="#2d8cf0">main.js:</font>
 
 ```javascript
-import '@/node_modules/fonlineconsulatation/packages/styles/index.less';
-import fonlineconsulatation from 'fonlineconsultation';
+import '../node_modules/fonlineconsultation/packages/styles/index.less';
+import fonlineconsultation from 'fonlineconsultation';
 Vue.use(fonlineconsultation);
 ```
 
