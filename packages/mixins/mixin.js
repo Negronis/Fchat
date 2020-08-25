@@ -8,11 +8,7 @@ export default {
             loadingHeight: 0
         }
     },
-    props: {
-        // index
-        height: {
-            default: window.innerHeight,
-        },
+    props: { 
         // header
         username: {
             type: String,
@@ -29,10 +25,7 @@ export default {
         // input
         preventId:{
             default:"fonlineconsultation"
-        },
-        sendMessage: {
-            default: ""
-        },
+        }, 
         leftIcon: {
             type: String,
             default: "FiconFont icon-weixinyuyin"
@@ -67,14 +60,20 @@ export default {
             default: "#000"
         },
         // pop
+        popBg:{
+            type:String, 
+        },
+        popSize:{
+            type:Number, 
+        },
+        popLeftAva:{
+            type:String
+        },
+        popRightAva:{
+            type:String
+        }
     },
-    computed: {
-        // index 
-
-        // header 
-
-        // content 
-
+    computed: {  
         contentProp() {
             let { contentHeight, authorHeight, contentBg } = this;
             let retObj = {};
@@ -197,7 +196,11 @@ export default {
         },
         //默认录音方法
         leftHandlerClick() {
-            this.isVoice = !this.isVoice;
+            if(FChat.isOpenVoice){
+                this.isVoice = !this.isVoice;
+            }else{
+                FChat.createToast('您未开启音频加载，无法使用音频');
+            }
         },
         //发送图片
         rightHandlerClick() {

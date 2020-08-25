@@ -5,37 +5,54 @@
       <div class="content-avatar" v-if=" pos === 'left' ">
         <img :src="leftSrc" width="40px" height="40px" alt />
       </div>
-      <div :class="className">
-        <div :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
-          <!-- 用户自定 -->
-          <slot name="image"></slot>
-          <slot name="message"></slot>
-          <slot name="audio"></slot>
-          <slot name="video"> </slot>
-          <!-- 默认 -->
-          <pre v-if="type === 'message'" v-html="content"> 
-          </pre>
-          <div v-if="type === 'image'" style="text-align:center"> 
-            <!-- loading  -->
-            <div v-if="!imgLoadingComplete" class="content-pops-all-img-loading">
-              <img src="@/assets/svg/oval.svg" width="50px" alt="">
-            </div>
-            <!-- 图片 -->
-            <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoadingComplete == true ? 'block' : 'none'}" />
+
+      <div :class="className"  v-if="type === 'message'" >
+        <slot name="message">
+          <div :class="'content-pops-'+pos+'-content'" v-bind="PopProp">  
+              <pre  v-html="content"></pre>
           </div>
-          <div v-if="type === 'audio'"> 
-              <div :class="'content-pops-'+pos+'-content-audio'" @click="play(content,duration)">
-                <span v-if="pos=='right'">{{typeof duration == "number" ? duration + '"' : duration}}&nbsp;</span>
-                <span :class="pos == 'left' ? 'FiconFont  icon-yuyin1' : 'FiconFont  icon-yuyin'"></span>
-                <span v-if="pos=='left'">&nbsp;{{typeof duration == "number" ? duration + '"' : duration}}</span> 
-              </div>
-          </div>
-          <div v-if="type === 'video'">
-            <video id="PopsVideo" width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint">
-            </video> 
-          </div> 
-        </div>
+        </slot> 
       </div>
+
+      <div :class="className" v-if="type === 'image'">
+        <slot name="image">
+          <div   :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
+                <div style="text-align:center"> 
+                  <!-- loading  -->
+                  <div v-if="!imgLoadingComplete" class="content-pops-all-img-loading">
+                    <img src="@/assets/svg/oval.svg" width="50px" alt="">
+                  </div>
+                  <!-- 图片 -->
+                  <img  @load="imgLoad(content)" :src="content" alt="loading" width="100%" :style="{marginTop:'0px' , display:imgLoadingComplete == true ? 'block' : 'none'}" />
+                </div>
+          </div>
+        </slot>
+      </div>
+
+      <div :class="className" v-if="type === 'audio'">
+        <slot name="audio">
+          <div   :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
+                <div> 
+                    <div :class="'content-pops-'+pos+'-content-audio'" @click="play(content,duration)">
+                      <span v-if="pos=='right'">{{typeof duration == "number" ? duration + '"' : duration}}&nbsp;</span>
+                      <span :class="pos == 'left' ? 'FiconFont  icon-yuyin1' : 'FiconFont  icon-yuyin'"></span>
+                      <span v-if="pos=='left'">&nbsp;{{typeof duration == "number" ? duration + '"' : duration}}</span> 
+                    </div>
+                </div>
+          </div>
+        </slot>
+      </div>
+
+      <div :class="className" v-if="type === 'video'">
+        <slot name="video"> 
+          <div  :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
+                <div>
+                  <video id="PopsVideo" width="100%"   class="videoBox"    :src="content"    preload     controls    webkit-playsinline="true"    playsinline="true"  x-webkit-airplay="allow"  x5-video-player-type="h5"  x5-video-player-fullscreen="true"    x5-video-orientation="portraint"> </video> 
+                </div> 
+          </div>
+        </slot> 
+      </div>
+
       <div class="content-avatar" v-if=" pos === 'right' ">
         <img :src="rightSrc" width="40px" height="40px" alt />
       </div>
@@ -113,9 +130,9 @@ export default {
     PopProp() {
       let { size, bg } = this;
       let propObj = {
-        fontSIze: size + "px",
+        fontSize: size + "px",
       };
-      if (bg && bg !== "#6AEA9E") propObj["background"] = bg;
+      if (bg && bg !== "#6AEA9E") propObj["background"] = bg; 
       return {
         style: propObj,
       };

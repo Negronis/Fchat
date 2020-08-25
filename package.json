@@ -1,6 +1,6 @@
 {
   "name": "fonlineconsultation",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "main": "lib/fonlineconsultation.umd.js",
   "description": "基于websocket的手机端在线问诊模块",

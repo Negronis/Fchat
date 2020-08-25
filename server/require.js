@@ -17,7 +17,7 @@ router.get('/getMessage', (req, res) => {
       { "content": "来根华子？", "type": "message", "pos": "right" },
       { "content": "不好意老弟，我都抽95，华子那玩意咳shou！", "type": "message", "pos": "left" },
       { "content": "给你牛逼坏了嗷", "type": "message", "pos": "right" },
-      { "content": "http://192.168.1.4:8080/img.png", "type": "image", "pos": "right" },
+      { "content": "http://192.168.1.4:8081/img.png", "type": "image", "pos": "right" },
       { "content": "草你妈的", "type": "message", "pos": "left" },
       { "content": "你瞅你这个素质", "type": "message", "pos": "right" },
       { "content": "不服碰一下子？", "type": "message", "pos": "left" },
@@ -45,7 +45,7 @@ router.post('/sendMessage', jsonParser, (req, res) => {
                   throw err;
                } else {
                   sendData = req.body;
-                  sendData['content'] = 'http://192.168.1.4:8082/img.png';
+                  sendData['content'] = 'http://192.168.1.4:8081/img.png';
                   res.json(sendData)
                }
             })
@@ -65,7 +65,7 @@ router.post('/sendMessage', jsonParser, (req, res) => {
                   throw err;
                } else {
                   sendData = req.body;
-                  sendData['content'] = 'http://192.168.1.4:8082/video.mp4';
+                  sendData['content'] = 'http://192.168.1.4:8081/video.mp4';
                   res.json(sendData)
                }
             })

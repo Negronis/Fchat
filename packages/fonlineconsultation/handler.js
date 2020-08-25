@@ -1,33 +1,36 @@
 import Vue from 'vue'; 
 class FChat {
-   constructor(message,loadingState,maxSize,onlyImg) {
+   constructor(message) {
       // 消息列表
       this.message = message;
       // loading状态
-      this.loadingState = loadingState || false ;
+      this.loadingState =  false ;
       //图片最大多少mb
-      this.maxSize = maxSize || 2 ;
+      this.maxSize = 2 ;
       //是否只能发图片
-      this.onlyImg = onlyImg || false;
+      this.onlyImg =  false;
       //Toast单例
       this.ToastDiv = null;
       // 音频错误状态记录
       this.voiceState = false;  
       //audio标签单例
       this.audioObj = "";
+      //用户开启音频?
+      this.isOpenVoice = false;
    } 
    // 可由用户选择是否开启音频
    openVoice(url,isPromise){
       const that = this;
       // 如果挂载音频则帮忙授权
-      if(!Vue.prototype.$RecordApp){ 
+      if(!Vue.prototype.$RecordApp){  
          setTimeout(function(){
             that.createToast('正在加载音频插件，请稍等');
-         })
+         },0)
          Promise.all([
             import ('../../packages/recorder')
          ]).then(function(){
             console.log('音频插件以挂载');
+            that.isOpenVoice = true;
             if(!isPromise) return ;
             Vue.prototype.$RecordApp.RequestPermission(
                   // 用户已经授权的回调
@@ -207,13 +210,12 @@ class FChat {
       return MessageObject;
    }
    // 播放音频
-   playVoice(src,duration){ 
+   playVoice(src,duration){  
       if(this.audioObj == "") {
          var audio = document.createElement('audio');
          audio.src = src;
          document.body.appendChild(audio); 
          this.audioObj = audio;
-      
       }else{
          this.audioObj.src = src;
       }
@@ -221,8 +223,8 @@ class FChat {
       this.createToast('正在播放音频 ...',duration * 1000);
    }
    // 开始录音
-   startVoice(){
-      return new Promise(function(resolve,reject){
+   startVoice(){ 
+      return new Promise(function(resolve,reject){ 
          Vue.prototype.$RecordApp.Start(
             { 
             type: "mp3",
@@ -235,8 +237,8 @@ class FChat {
             },
             }, 
             function(){
-            resolve();
-            console.log('开始录音 ....');
+               resolve();
+               console.log('开始录音 ....');
             },
             function (msg) {
                reject("开始录音失败：" + msg)
@@ -245,7 +247,7 @@ class FChat {
       })
    }
    // 暂停录音
-   pauseVoice(){
+   pauseVoice(){ 
       let that = this; 
       return new Promise(function(resolve,reject){
       Vue.prototype.$RecordApp.Stop(

@@ -8,7 +8,22 @@
     </div>
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
-      <pops v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']" :duration="item['duration'] || '未知'"></pops>
+      <slot name="popList" v-bind:List="MessageArray">
+          <pops :leftSrc="popLeftAva" :rightSrc="popRightAva" :bg="popBg" :size="popSize" v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']" :duration="item['duration'] || '未知'">
+                 <template v-slot:message>
+                    <slot name="message" v-bind:Item="item"></slot> 
+                </template>
+                 <template v-slot:image>
+                  <slot name="image" v-bind:Item="item"></slot>
+                </template>
+                 <template v-slot:audio>
+                  <slot name="audio" v-bind:Item="item"></slot>
+                </template>
+                 <template v-slot:video>
+                  <slot name="video" v-bind:Item="item"></slot>
+                </template>
+          </pops>
+      </slot> 
     </div>
     <!-- input -->
     <div class='online-input-content' id='onlineInput' ref='onlineInput'>

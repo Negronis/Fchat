@@ -4,7 +4,23 @@
       @send="sendMsg"
       @sendImg="sendImg"
       @sendVoice="senVoice"
-    ></FonlineConsultation>
+    >
+      <!-- <template v-slot:popList ="List">
+          {{List}}
+        </template> -->
+      <!-- <template v-slot:message="message">
+        {{message}}
+      </template>
+      <template v-slot:image="image">
+        {{image}}
+      </template>
+      <template v-slot:voice="voice">
+        {{voice}}
+      </template>
+      <template v-slot:audio="audio">
+        {{audio}}
+      </template> -->
+    </FonlineConsultation>
   </div>
 </template>
 
@@ -84,12 +100,12 @@ export default {
           this.$FChat.sendMessage(msgObject);
           this.$FChat.cancelLoading();
           // 服务器返回 - 格式拼接
-          let { content, pos, type,duration } = res.data;
+          let { content, pos, type, duration } = res.data;
           this.$FChat.sendMessage({
             content: content,
             type: type,
             pos: "left",
-            duration:duration
+            duration: duration,
           });
         }
       });
