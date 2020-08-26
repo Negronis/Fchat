@@ -28,6 +28,8 @@ npm i fonlineconsultation
 import '../node_modules/fonlineconsultation/packages/styles/index.less';
 import fonlineconsultation from 'fonlineconsultation';
 Vue.use(fonlineconsultation);
+//音频开启，参照下面音频章节
+import '../node_modules/fonlineconsultation/packages/recorder.js';
 ```
 
 <font color="#2d8cf0">x.vue:</font>
@@ -266,29 +268,17 @@ this.$FChat.getMessage()
 
 为了多端兼容使用[Recorder.js](https://github.com/xiangyuecn/Recorder)插件，关于Vue使用Recorder.js的demo可参照[样例](https://github.com/Negronis/RecorderExample)
 
-<font color="#2d8cf0">第一种，直接引入到main.js，可通过this.$Recorder调用相关api(需修改根目录下的ios-weixin-config.js文件中的服务器授权地址)</font>
+<font color="#2d8cf0">直接引入到main.js，可通过this.$Recorder调用相关api</font>
 
 ```javascript
 import './node_modules/fonlineconsultation/packages/recorder.js';
 ```
 
-修改完授权地址后，可在app.vue进行手动授权：
+<font color="#2d8cf0">在需要的.vue中调用此方法并键入微信授权/下载素材的url</font>
 
-```javascript
-this.$RecorderApp.RequestPermission(
-    //成功回调
-	function(){},
-    //失败回调
-    function(msg,isUserNotAllow){}
-)
-```
-
-<font color="#2d8cf0">第二种，app.vue中，也可以通过this.$Recorder调用相关api</font>
-
-```javascript
+```vue
 created(){
-    //url为服务器微信授权/素材下载的地址(安卓不需要填) isPromise-是否需要加载完音频插件时自动授权
-	this.$FChat.openVoice(url,isPromise);
+   this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true);
 }
 ```
 
@@ -307,7 +297,7 @@ created(){
 
 | 方法            | 作用                                      | 参数                                                         |
 | --------------- | ----------------------------------------- | ------------------------------------------------------------ |
-| openVoice*      | 控制是否开启音频功能                      | url - 服务器地址(微信授权+下载素材)<br />isPromise - 是否自动进行音频授权 |
+| openVoice*      | 修改微信地址和授权                        | url - 服务器地址(微信授权+下载素材)<br />isPromise - 是否自动进行音频授权 |
 | setConfig*      | 设置基本属性                              | key - 要修改的属性名<br />value - 修改为<br />config - 对象形式(和上面二选一) |
 | getLoading      | 获取当前loading状态                       | null                                                         |
 | loading*        | 显示全屏loading                           | time - 显示时长<br />loadingId - 自定义loading的id(display切换显示隐藏)，没有可不传texDisabled - 文本框在loading状态下是否disabled，默认false |

@@ -355,6 +355,7 @@ export default {
         window.addEventListener('keydown', (e) => {
             let { keyCode } = e;
             if (keyCode === 13) {
+                e.preventDefault();
                 this.messageHandler();
             }
         }) 

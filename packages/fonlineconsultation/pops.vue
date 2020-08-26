@@ -13,7 +13,6 @@
           </div>
         </slot> 
       </div>
-
       <div :class="className" v-if="type === 'image'">
         <slot name="image">
           <div   :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
@@ -95,11 +94,11 @@ export default {
     // 头像地址
     leftSrc: {
       type: String,
-      default: "https://pic.downk.cc/item/5f44d44c160a154a673694e4.jpg"
+      default: "https://p.pstatp.com/origin/137460000bd26a8a1928a"
     },
     rightSrc: {
       type: String,
-      default: "https://pic.downk.cc/item/5f44d468160a154a6736b034.jpg"
+      default: "https://p.pstatp.com/origin/1379d00013a79df92cd7a"
     },
     // 消息类型
     type: {

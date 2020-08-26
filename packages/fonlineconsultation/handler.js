@@ -1,4 +1,19 @@
-import Vue from 'vue'; 
+import Vue from 'vue';   
+function installRecorder(isPromise){
+   var that = this;
+   if(!isPromise) return ;
+   Vue.prototype.$RecordApp.RequestPermission(
+         // 用户已经授权的回调
+      function () { 
+         that.createToast('音频授权成功。') 
+      },
+      //用户拒绝未授权或不支持
+      function (msg, isUserNotAllow) {  
+         that.createToast(isUserNotAllow ? "授权出现问题" : "音频出现故障" + '，原因是：'+msg);
+         that.voiceState = true; 
+      }
+   );
+}
 class FChat {
    constructor(message) {
       // 消息列表
@@ -15,36 +30,29 @@ class FChat {
       this.voiceState = false;  
       //audio标签单例
       this.audioObj = ""; 
-   } 
-   // 可由用户选择是否开启音频
-   openVoice(url,isPromise){
+   }
+   openVoice(url,isPromise){ 
       const that = this;
-      // 如果挂载音频则帮忙授权
-      if(!Vue.prototype.$RecordApp){  
+      // 如果挂载音频则帮忙授权  
+      if(Vue.prototype.$RecordApp){    
+         if(url){ 
+            window.PageSet_RecordAppWxApi = url;
+         }
          setTimeout(function(){
             that.createToast('正在加载音频插件，请稍等');
          },0)
-         Promise.all([
-            import ('../../packages/recorder')
-         ]).then(function(){
-            console.log('音频插件以挂载'); 
-            if(!isPromise) return ;
-            Vue.prototype.$RecordApp.RequestPermission(
-                  // 用户已经授权的回调
-               function () { 
-                  that.createToast('音频授权成功。') 
-               },
-               //用户拒绝未授权或不支持
-               function (msg, isUserNotAllow) {  
-                  that.createToast(isUserNotAllow ? "授权出现问题" : "音频出现故障" + '，原因是：'+msg);
-                  that.voiceState = true; 
-               }
-            );
-         })
-         if(url){
-            console.log(window);
-            window.PageSet_RecordAppWxApi = url;
-         }
+         if(!isPromise) return ;
+         Vue.prototype.$RecordApp.RequestPermission(
+               // 用户已经授权的回调
+            function () { 
+               that.createToast('音频授权成功。') 
+            },
+            //用户拒绝未授权或不支持
+            function (msg, isUserNotAllow) {  
+               that.createToast(isUserNotAllow ? "授权出现问题" : "音频出现故障" + '，原因是：'+msg);
+               that.voiceState = true; 
+            }
+         );
       }
    }
    // 参数设定

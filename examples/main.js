@@ -6,9 +6,9 @@ import router from  './router';
 import "babel-polyfill";
 
 import '../packages/styles/index.less';
-import fonlineconsulatation from '../packages';  
-import FChat from '../packages';  
- 
+import fonlineconsulatation from '../packages';   
+import '../packages/recorder.js';
+
 Vue.config.productionTip = false;
 
 import Vconsole from 'vconsole';
@@ -16,8 +16,7 @@ const vconsole = new Vconsole;
 Vue.use(vconsole);   
 
 
-Vue.use(fonlineconsulatation);  
-Vue.use(FChat);  
+Vue.use(fonlineconsulatation);   
 new Vue ({
    router,
    render : h => h(App),
