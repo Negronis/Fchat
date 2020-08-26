@@ -4,13 +4,13 @@
 
 [TOC]
 
-***
+------
 
 ###### 简介
 
 简易版的仿微信版移动端h5聊天插件，使用简单，兼容音频，高度定制化，ios/android兼容。
 
-***
+------
 
 ###### 安装
 
@@ -18,11 +18,11 @@
 npm i fonlineconsultation
 ```
 
-***
+------
 
 ###### 使用方法
 
-<font color="#2d8cf0">main.js:</font>
+<font color=#2d8cf0>main.js</font>
 
 ```javascript
 import '../node_modules/fonlineconsultation/packages/styles/index.less';
@@ -32,13 +32,13 @@ Vue.use(fonlineconsultation);
 import '../node_modules/fonlineconsultation/packages/recorder.js';
 ```
 
-<font color="#2d8cf0">x.vue:</font>
+<font color=#2d8cf0>x.vue</font>
 
 ```vue
 <FonlineConsultation></FonlineConsultation>
 ```
 
-***
+------
 
 ###### 数据结构
 
@@ -51,11 +51,11 @@ import '../node_modules/fonlineconsultation/packages/recorder.js';
   }
 ```
 
-***
+------
 
 ###### 可配置参数
 
-<font color="#2d8cf0">必要方法</font>
+<font color=#2d8cf0>必要方法</font>
 
 | 方法名    | 作用                                    |
 | --------- | --------------------------------------- |
@@ -63,7 +63,7 @@ import '../node_modules/fonlineconsultation/packages/recorder.js';
 | sendImg   | 获取图片/视频(可开关)信息回调，用来发送 |
 | sendVoice | 获取音频消息回调，用来发送              |
 
-<font color="#2d8cf0">如何使用？</font>
+<font color=#2d8cf0>如何使用？</font>
 
 ```javascript
 <FonlineConsultation
@@ -100,7 +100,7 @@ sendVoice(sendObject){
 }
 ```
 
-<font color="#2d8cf0">使用样例</font>
+<font color=#2d8cf0>使用样例</font>
 
 ```javascript
 /*
@@ -168,9 +168,9 @@ methods: {
   }
 ```
 
-***
+------
 
-<font color="#2d8cf0">属性参数</font>
+<font color=#2d8cf0>属性参数</font>
 
 | 参数名         | 功能                                                         | 示例                            | 说明                                  | 类型   |
 | -------------- | ------------------------------------------------------------ | ------------------------------- | ------------------------------------- | ------ |
@@ -191,7 +191,7 @@ methods: {
 | popRightAva    | 聊天气泡右侧头像                                             | 图片链接                        |                                       | String |
 | popLeftAva     | 聊天气泡左侧头像                                             | 图片链接                        |                                       | String |
 
-***
+------
 
 ###### 插槽
 
@@ -203,10 +203,14 @@ methods: {
 | centerText | 中间的输入框插槽(原框带仿微信文本换行功能，替换后如需要请自行实现) |
 | rightIcon  | 右侧图标插槽(带有选择图片，发送文本方法[包含发送后动态宽高的计算]) |
 | loading    | 图片loading(id为messageLoading，绑定着消息发送的loading方法) |
+| header     | 整个header的插槽，注意要设置id为onlineHeader方便计算内容高度 |
+| hLeft      | header左侧功能                                               |
+| hCenter    | header中间整体                                               |
+| hRight     | header右侧功能                                               |
 
-***
+------
 
-<font color="#2d8cf0">单独气泡重写插槽</font>
+<font color=#2d8cf0>单独气泡重写插槽</font>
 
 | 插槽名称 | 说明         |
 | -------- | ------------ |
@@ -244,9 +248,9 @@ methods: {
 content:"我是一个网址<a>http://www.baidu.com</a>"
 ```
 
-***
+------
 
-<font color="#2d8cf0">整体聊天气泡重写插槽</font>
+<font color=#2d8cf0>整体聊天气泡重写插槽</font>
 
 插槽名为：popList
 
@@ -262,19 +266,19 @@ this.$FChat.getMessage()
 </FonlineConsultation>    
 ```
 
-***
+------
 
 ###### 音频开启方法
 
 为了多端兼容使用[Recorder.js](https://github.com/xiangyuecn/Recorder)插件，关于Vue使用Recorder.js的demo可参照[样例](https://github.com/Negronis/RecorderExample)
 
-<font color="#2d8cf0">直接引入到main.js，可通过this.$Recorder调用相关api</font>
+<font color=#2d8cf0>直接引入到main.js，可通过this.$Recorder调用相关api</font>
 
 ```javascript
 import './node_modules/fonlineconsultation/packages/recorder.js';
 ```
 
-<font color="#2d8cf0">在需要的.vue中调用此方法并键入微信授权/下载素材的url</font>
+<font color=#2d8cf0>在需要的.vue中调用此方法并键入微信授权/下载素材的url</font>
 
 ```vue
 created(){
@@ -282,16 +286,16 @@ created(){
 }
 ```
 
-***
+------
 
 ###### FChart类
 
-<font color="#2d8cf0">可修改属性 - 通过setConfig修改</font>
+<font color=#2d8cf0>可修改属性 - 通过setConfig修改</font>
 
 - [x] maxSize - 图片最大大小(默认为2M)
 - [x] onlyImg - 是否只允许发图片(默认为图片+视频都可以发送)
 
-***
+------
 
 <font color="#2d8cf0">方法一览(*为常用)</font>
 
@@ -315,12 +319,14 @@ created(){
 | playVoice*      | 播放音频                                  | src - 音频链接/blob等audio支持的格式<br />duration - 持续时间 |
 | createToast*    | 创建提示框(顶部)                          | msg - 提示消息<br />timer - 持续时间                         |
 
-***
+------
 
 ###### Demo
 
-***
+[Vue样例](https://github.com/Negronis/FChatDemo)
+
+------
 
 ###### 注意
 
-由于<font color="#ff9900">h5本身自带的长按复制功能</font>，按钮长按后会出现选中文本导致失效，所以在长按事件中加入了禁止长按复制功能(松开后自动取消)，但仅仅限制了该插件的范围，可通过传入<font color="#ff9900">preventId</font>属性来增大限制范围防止误选中，主要使用user-select等属性进行控制。
+由于<font color=#ff9900>h5本身自带的长按复制功能</font>，按钮长按后会出现选中文本导致失效，所以在长按事件中加入了禁止长按复制功能(松开后自动取消)，但仅仅限制了该插件的范围，可通过传入<font color=#ff9900>preventId</font>属性来增大限制范围防止误选中，主要使用user-select等属性进行控制。

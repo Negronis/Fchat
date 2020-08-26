@@ -9,18 +9,18 @@ var jsonParser = bodyParser.json()
 router.get('/getMessage', (req, res) => {
    let sendData = [
       { "content": "你好", "type": "message", "pos": "right" },
-      { "content": "你好吗？", "type": "message", "pos": "left" },
-      { "content": "好你妈？", "type": "message", "pos": "right" },
-      { "content": "好你妈！", "type": "message", "pos": "left" },
-      { "content": "你妈没了？", "type": "message", "pos": "right" }
-      , { "content": "你妈没了！", "type": "message", "pos": "left" },
+      { "content": "你好", "type": "message", "pos": "left" },
+      { "content": "你好?", "type": "message", "pos": "right" },
+      { "content": "你好!", "type": "message", "pos": "left" },
+      { "content": "你好?", "type": "message", "pos": "right" }
+      , { "content": "你好!", "type": "message", "pos": "left" },
       { "content": "来根华子？", "type": "message", "pos": "right" },
-      { "content": "不好意老弟，我都抽95，华子那玩意咳shou！", "type": "message", "pos": "left" },
-      { "content": "给你牛逼坏了嗷", "type": "message", "pos": "right" },
+      { "content": " 那玩意咳shou！", "type": "message", "pos": "left" },
+      { "content": "你好?", "type": "message", "pos": "right" },
       { "content": "http://192.168.1.4:8081/img.png", "type": "image", "pos": "right" },
-      { "content": "草你妈的", "type": "message", "pos": "left" },
-      { "content": "你瞅你这个素质", "type": "message", "pos": "right" },
-      { "content": "不服碰一下子？", "type": "message", "pos": "left" },
+      { "content": "???", "type": "message", "pos": "left" },
+      { "content": "你好？", "type": "message", "pos": "right" },
+      { "content": "你好！", "type": "message", "pos": "left" },
    ];
    res.json(sendData);
 })
@@ -72,11 +72,10 @@ router.post('/sendMessage', jsonParser, (req, res) => {
          }
       })
    }
-   if(type == 'audio'){
-      // let data = fs.readFileSync('./voice/ebf3b0c7b1c015f70115a8d869127c010829f3ff'+'.amr' , 'base64'); 
+   if(type == 'audio'){ 
       // buffer转化为base64编码 
       sendData = req.body;
-      sendData['content'] = 'http://192.168.1.4:8082/mp3/ebf3b0c7b1c015f70115a8d869127c010829f3ff.mp3';
+      sendData['content'] = 'http://192.168.1.4:8082/mp3/xx.mp3';
       res.json(sendData);
    }
 });

@@ -1,11 +1,13 @@
 <template>
   <div id="fonlineconsultation" class="fonlineconsultation-outer-div" v-bind="Height" >
     <!-- header -->
-    <div id="onlineHeader" class="online-header-all" ref="onlineHeader">
-      <div class="online-header-all-left">功能1</div>
-      <div class="online-header-all-center">{{username}}</div>
-      <div class="online-header-all-right">功能2</div>
-    </div>
+    <slot name="header" id="onlineHeader">
+        <div id="onlineHeader" class="online-header-all" ref="onlineHeader">
+          <div class="online-header-all-left"><slot name="hLeft"> </slot> </div> 
+            <div class="online-header-all-center"><slot name="hCenter">{{username}}</slot></div> 
+            <div class="online-header-all-right"> <slot name="hRight"></slot> </div>
+        </div>
+    </slot>
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
       <slot name="popList" v-bind:List="MessageArray">
