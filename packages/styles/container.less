@@ -38,31 +38,33 @@ body {
  }
  // input
  .online-input-content{   
-   width:100%;
-   padding:8px;
-   padding-bottom:20px;
-   padding-top:10px;
+   width:100%; 
    background-image:linear-gradient(to right , #EAEAEA  0% , #fff 50%, #EAEAEA 100%);
    box-sizing: border-box;
-   display:flex; 
-   &-lefticon{
+   display:flex;  
+   bottom:0;
+   min-height:80px;
+   padding-top:10px;
+   &-lefticon{ 
+      line-height:1.2;
+      position: relative;
        text-align: center;
        flex:2;  
-       position: relative;
        left:0px;
+       padding-top:5px;
        span{
-         position: absolute;
-         bottom:18px;
+         position: absolute; 
        }
    }
    &-righticon{
-       flex:3;
-       text-align: center; 
-       position: relative;
-       right:0px;
+      line-height:1.2;
+      position: relative;
+      flex:3;
+      text-align: center; 
+      right:0px; 
+      padding-top:5px;
        span{
-         position: absolute;
-         bottom:21px; 
+         position: absolute; 
          &:first-child{ 
              left:13px;
          }
@@ -72,47 +74,50 @@ body {
        }
    }
    &-centerInput{
-       flex:8;
-       padding:9.5px;  
-       textarea{ 
-         width:100%;
-         padding:5px 1%;
+       flex:8; 
+       textarea{  
+         width:100%; 
          border-radius:5px;
-         outline: none; 
-         font-size:18px;
+         outline: none;  
          border:1px solid #dcdee2;
          resize:none; 
          -webkit-appearance: none;appearance: none;
+         padding:5px;
+         box-sizing:border-box; 
+         font-size:15px;
+         line-height: 25px;
+         margin:0;
        }
-       &-voice{    
-        display: inline-block;     
-        padding:5px 1%;
-        width:100%; 
-        border-radius:5px;
-        outline: none; 
-        font-size:13px;
-        border:1px solid #dcdee2;
+       &-voice{     
+        width:100%;  
+        outline: none;  
         resize:none; 
-        background:#fff; 
-        height:22px;
+        background:#fff;  
         position: relative;
+        border-radius: 5px;
+        border:none;
+        box-sizing: border-box; 
         left:0px;
         top:0px;
-          button{ 
-            background:#fff;
-            position: absolute; 
+          button{   
             top:0px;
             left:0px;
+            position: absolute;
             width:100%; 
-            padding:6px 0;
             margin:0px;
             border:none;
             border-radius: 5px;
             outline:none; 
             box-sizing: border-box;
+            background: #fff;
             z-index:10;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent; 
             cursor: pointer;
+            border:1px solid #dcdee2;
+            font-size:15px;
+            line-height: 25px;
+            margin:0;
+            .noSelect 
           } 
        } 
    }  
@@ -135,9 +140,9 @@ body {
    }
  }
  .voice-pop{
-   width:100px;
-   height:100px;
-   padding:20px;
+   width:130px;
+   height:130px;
+  //  padding:20px;
    position: fixed;
    background:rgba(0,0,0,.5);
    top:0px;
@@ -146,6 +151,7 @@ body {
    right:0px;
    margin:auto;
    border-radius: 10px;
+   line-height:1;
    text-align: center; 
    &-contant{
      color:#fff;

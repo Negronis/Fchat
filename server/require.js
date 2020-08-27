@@ -21,6 +21,8 @@ router.get('/getMessage', (req, res) => {
       { "content": "???", "type": "message", "pos": "left" },
       { "content": "你好？", "type": "message", "pos": "right" },
       { "content": "你好！", "type": "message", "pos": "left" },
+      { "content": "", "type": "audio", "pos": "right",duration:5 },
+      { "content": "", "type": "audio", "pos": "left",duration:1 },
    ];
    res.json(sendData);
 })

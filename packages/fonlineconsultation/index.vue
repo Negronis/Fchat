@@ -40,8 +40,8 @@
            <!-- center -->
             <slot name="centerText">
                 <textarea  v-if="!isVoice" @blur="controlHeight('blur')" @focus="controlHeight('focus')" id="msgInput" v-model="messageString" ref="msgInput" @input="controlRow" cols="24" :rows="controlRows" ></textarea>
-                <div   v-if="isVoice"  class="online-input-content-centerInput-voice" :style="{height:isIOS == false ? '21px' : '',marginBottom:isIOS == true? '2px' : '', marginTop:isIOS == true ? '2px' : ''}">
-                    <button @touchstart="startVoice" @touchmove="moveVoice" @touchend="endVoice" :style="{lineHeight:isIOS == true ? '20px' : ''}">{{voiceMsg}}</button>
+                <div  v-if="isVoice"  class="online-input-content-centerInput-voice" :style="{height:isIOS == false ? '0' : '',marginBottom:isIOS == true? '0' : '', marginTop:isIOS == true ? '' : ''}">
+                    <button :style="{padding:isIOS == true ? '5px' : '5px'}" @touchstart="startVoice" @touchmove="moveVoice" @touchend="endVoice">{{voiceMsg}}</button>
                 </div>
             </slot> 
          </div> 
@@ -71,7 +71,7 @@
                         </path>
                     </g>
                 </g>
-            </svg>
+              </svg>
           </div>
         </div>
       </slot> 
@@ -82,7 +82,7 @@
           <div class="voice-pop-contant">{{voiceContent}}</div>
       </div>
       <div class="voice-pop" v-if="voiceStartLoading">  
-              <svg class="MessageLoading-Img" width="50" height="50" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+            <svg class="MessageLoading-Img" width="50" height="50" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
                 <g fill="none" fill-rule="evenodd">
                     <g transform="translate(1 1)" stroke-width="2">
                         <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>

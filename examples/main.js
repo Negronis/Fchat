@@ -7,13 +7,13 @@ import "babel-polyfill";
 
 import '../packages/styles/index.less';
 import fonlineconsulatation from '../packages';   
-import '../packages/recorder.js';
+import '../packages/recorder.js'; 
 
 Vue.config.productionTip = false;
 
-import Vconsole from 'vconsole';
-const vconsole = new Vconsole;
-Vue.use(vconsole);   
+// import Vconsole from 'vconsole';
+// const vconsole = new Vconsole;
+// Vue.use(vconsole);   
 
 
 Vue.use(fonlineconsulatation);   

@@ -30,6 +30,8 @@ class FChat {
       this.voiceState = false;  
       //audio标签单例
       this.audioObj = ""; 
+      //createToast所用的top ,所有header的高度之和
+      this.ToastTop = "";
    }
    openVoice(url,isPromise){ 
       const that = this;
@@ -295,7 +297,7 @@ class FChat {
             z-index:10;
             overflow:hidden;
             height:0px;
-            top:${document.getElementById('onlineHeader').clientHeight}px;
+            top:${this.ToastTop || document.getElementById('onlineHeader').clientHeight || 40}px;
          `
          div.innerHTML = msg;
          document.body.appendChild(div);

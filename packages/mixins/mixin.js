@@ -28,12 +28,12 @@ export default {
         }, 
         leftIcon: {
             type: String,
-            default: "FiconFont icon-weixinyuyin"
+            default: "FiconFont icon-volume"
         },
         // 音频切换
         leftIconChange:{
             type:String,
-            default:"FiconFont icon-weixinjianpan"
+            default:"FiconFont icon-fillin"
         },
         rightIconLeft: {
             type: String,
@@ -41,7 +41,7 @@ export default {
         },
         rightIconRight: {
             type: String,
-            default: "FiconFont icon-fasong"
+            default: "FiconFont icon-send"
         },
         leftIconSize: {
             type: Number,
@@ -49,7 +49,7 @@ export default {
         },
         rightIconSize: {
             type: Number,
-            default: 20
+            default: 23
         },
         leftIconColor: {
             type: String,

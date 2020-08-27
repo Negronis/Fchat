@@ -3,8 +3,8 @@ const { writeFs, readFs, sha1, raw, createTimestamp, createNonceStr } = require(
 const fs = require('fs');
 const Config = {
    grant_type: 'client_credential',
-   appid: ' ',
-   secret: ' ',
+   appid: 'wx4a0799ba202d0768',
+   secret: 'f71c8476feaf2fdab573a79f61a7062c',
    accessUrl: "https://api.weixin.qq.com/cgi-bin/token"
 };
 // 获取access_token

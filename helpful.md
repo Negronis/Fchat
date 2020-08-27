@@ -2,7 +2,24 @@
 
 ###### 目录
 
-[TOC]
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [FChat使用手册：](#fchat%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C)
+  - [目录](#%E7%9B%AE%E5%BD%95)
+  - [简介](#%E7%AE%80%E4%BB%8B)
+  - [安装](#%E5%AE%89%E8%A3%85)
+  - [使用方法](#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
+  - [数据结构](#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+  - [可配置参数](#%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
+  - [插槽](#%E6%8F%92%E6%A7%BD)
+  - [音频开启方法](#%E9%9F%B3%E9%A2%91%E5%BC%80%E5%90%AF%E6%96%B9%E6%B3%95)
+  - [FChart类](#fchart%E7%B1%BB)
+  - [Demo](#demo)
+  - [注意](#%E6%B3%A8%E6%84%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ------
 
@@ -294,6 +311,7 @@ created(){
 
 - [x] maxSize - 图片最大大小(默认为2M)
 - [x] onlyImg - 是否只允许发图片(默认为图片+视频都可以发送)
+- [x] ToastTop - 如果你有header则需要传入你的header高度+原header高度(id获取)，用来创建下拉Toast，否则会错位
 
 ------
 

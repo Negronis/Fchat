@@ -49,7 +49,7 @@
                 <div> 
                     <div :class="'content-pops-'+pos+'-content-audio'" @click="play(content,duration)">
                       <span v-if="pos=='right'">{{typeof duration == "number" ? duration + '"' : duration}}&nbsp;</span>
-                      <span :class="pos == 'left' ? 'FiconFont  icon-yuyin1' : 'FiconFont  icon-yuyin'"></span>
+                      <span :class="pos == 'left' ? 'FiconFont  icon-iconyuyin' : 'FiconFont  icon-yuyin'"></span>
                       <span v-if="pos=='left'">&nbsp;{{typeof duration == "number" ? duration + '"' : duration}}</span> 
                     </div>
                 </div>

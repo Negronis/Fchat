@@ -1,6 +1,6 @@
 {
   "name": "fonlineconsultation",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "private": false,
   "main": "lib/fonlineconsultation.umd.js",
   "description": "基于websocket的手机端在线问诊模块",
@@ -19,7 +19,7 @@
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
     "recorder-core": "^1.1.20062600",
-    "vconsole": "^3.3.4",
+    "vconsole": "^3.3.4", 
     "vue": "^2.6.11",
     "vue-router": "^3.3.4"
   },
