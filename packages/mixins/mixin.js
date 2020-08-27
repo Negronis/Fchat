@@ -96,7 +96,8 @@ export default {
                 this.$refs.onlineContentAll.style.height = this.contentHeight ||
                     height - (
                         (this.$refs.onlineHeader.offsetHeight || 0) +
-                        (this.$refs.onlineInput.offsetHeight || 0)
+                        (this.$refs.onlineInput.offsetHeight || 0)+
+                        (FChat.ToastTop||0)
                     ) + "px";
                 this.loadingHeight = height + 'px';
                 resolve();
@@ -349,7 +350,8 @@ export default {
         this.$nextTick(() => {
             this.authorHeight =
                 (this.$refs.onlineHeader.offsetHeight || 0) +
-                (this.$refs.onlineInput.offsetHeight || 0);
+                (this.$refs.onlineInput.offsetHeight || 0)
+                +(FChat.ToastTop||0);
                 this.loadingHeight = window.innerHeight + 'px';
         }); 
         window.addEventListener('keydown', (e) => {

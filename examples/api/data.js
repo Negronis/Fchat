@@ -1,5 +1,5 @@
 import axios from 'axios';
-const serverUrl = " ";
+const serverUrl = "";
 export let getMessage = () => {
    return axios.get(serverUrl + '/getMessage');
 }

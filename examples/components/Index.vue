@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div style="height:100px;width:100%"></div>
     <FonlineConsultation
       @send="sendMsg"
       @sendImg="sendImg"
@@ -21,6 +22,7 @@
         {{audio}}
       </template> -->
     </FonlineConsultation>
+    <!-- <div style="height:100px;width:100%"></div> -->
   </div>
 </template>
 
@@ -35,7 +37,8 @@ export default {
   },
   created() {
     // 挂载音频文件
-    this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true);
+    this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true); 
+    this.$FChat.setConfig('ToastTop',100)
     // 进入页面获取服务器数据
     var that = this;
     getMessage().then((res) => {
