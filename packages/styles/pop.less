@@ -1,3 +1,33 @@
+.content-pops-time{  
+  text-align: center;
+  box-sizing: border-box;
+  margin:0 auto; 
+  &-child{
+    box-sizing: border-box;
+    background:rgba(0,0,0,.2); 
+    display: inline-block;
+    padding:5px;
+    color:#fff;
+    border-radius: 5px;
+    font-size:10px;  
+    position: relative;
+    top:15px;
+  }
+}
+  .content-pops-time-right{
+    .content-pops-time;
+    text-align: right;  
+    &-child{
+      right:20px;
+    }
+  }
+  .content-pops-time-left{
+    .content-pops-time;
+    &-child{
+      left:20px;
+    }
+    text-align: left;  
+  }
 // 全局通用参数
 .content-pops-global (@justify:flex-end) {
    vertical-align: middle;

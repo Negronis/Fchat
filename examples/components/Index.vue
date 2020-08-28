@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height:100px;width:100%"></div>
+    <!-- <div style="height:100px;width:100%"></div> -->
     <FonlineConsultation
       @send="sendMsg"
       @sendImg="sendImg"
@@ -8,6 +8,9 @@
     >
       <!-- <template v-slot:popList ="List">
           {{List}}
+        </template> -->
+         <!-- <template v-slot:topText ="List">
+            {{List}}
         </template> -->
       <!-- <template v-slot:message="message">
         {{message}}
@@ -37,14 +40,17 @@ export default {
   },
   created() {
     // 挂载音频文件
-    this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true); 
-    this.$FChat.setConfig('ToastTop',100)
+    this.$FChat.openVoice(" ", true); 
+    // this.$FChat.setConfig('ToastTop',100)
     // 进入页面获取服务器数据
     var that = this;
     getMessage().then((res) => {
       setTimeout(() => {
         that.$FChat.setMessageList(res.data, function (e) {
-          e.forEach((el) => this.message.push(el));
+          e.forEach((el) =>{
+            // el["topText"] = "德莱蒋 2012年10月";
+              this.message.push(el)
+          });
           setTimeout(function () {
             that.$FChat.scrollMessage();
           }, 0);

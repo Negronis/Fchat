@@ -1,12 +1,17 @@
 <template>
   <div>
     <!-- 右框 -->
+    <!-- 头像上方 -->
+    <div :class="'content-pops-time-'+pos" v-if="avatarTop">
+      <slot name="topText">
+        <div :class="'content-pops-time-'+pos + '-child'">{{avatarTop}}</div>
+      </slot>
+    </div> 
     <div class="content-pops-all">
       <div class="content-avatar" v-if=" pos === 'left' ">
-        <img :src="leftSrc" width="40px" height="40px" alt />
-      </div>
-
-      <div :class="className"  v-if="type === 'message'" >
+        <img :src="leftSrc" width="40px" height="40px" alt /> 
+      </div>  
+      <div :class="className"  v-if="type === 'message'" > 
         <slot name="message">
           <div :class="'content-pops-'+pos+'-content'" v-bind="PopProp">  
               <pre  v-html="content"></pre>
@@ -42,7 +47,6 @@
           </div>
         </slot>
       </div>
-
       <div :class="className" v-if="type === 'audio'">
         <slot name="audio">
           <div   :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
@@ -56,7 +60,6 @@
           </div>
         </slot>
       </div>
-
       <div :class="className" v-if="type === 'video'">
         <slot name="video"> 
           <div  :class="'content-pops-'+pos+'-content'" v-bind="PopProp">
@@ -66,11 +69,10 @@
           </div>
         </slot> 
       </div>
-
       <div class="content-avatar" v-if=" pos === 'right' ">
         <img :src="rightSrc" width="40px" height="40px" alt />
       </div>
-    </div>
+    </div> 
   </div>
 </template>
 
@@ -79,6 +81,8 @@ import FChat from './handler';
 export default {
   name: "pops",
   props: {
+    avatarTop:{ 
+    },
     pos: {
       type: String,
       default: "right",

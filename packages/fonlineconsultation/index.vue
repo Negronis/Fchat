@@ -11,7 +11,10 @@
     <!-- content -->
     <div class="online-content-all" v-bind="contentProp" ref="onlineContentAll"> 
       <slot name="popList" v-bind:List="MessageArray">
-          <pops :leftSrc="popLeftAva" :rightSrc="popRightAva" :bg="popBg" :size="popSize" v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']" :duration="item['duration'] || '未知'">
+          <pops :avatarTop="item['topText']" :leftSrc="popLeftAva" :rightSrc="popRightAva" :bg="popBg" :size="popSize" v-for = "(item,index) in MessageArray" :key = "index" :content="item['content']" :type="item['type']" :pos="item['pos']" :duration="item['duration'] || '未知'">
+                <template v-slot:topText  v-bind:Item="item" >
+                    <slot name="topText" v-bind:Item="item"></slot> 
+                </template>
                  <template v-slot:message>
                     <slot name="message" v-bind:Item="item"></slot> 
                 </template>

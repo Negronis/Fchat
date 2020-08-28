@@ -64,6 +64,7 @@ import '../node_modules/fonlineconsultation/packages/recorder.js';
          type:消息类型(message / image / video / audio),
          content:消息内容,
          pos:消息位置(left/right),
+         ? topText: //头像上方的文字显示(可选)
          ? duration:"" //音频时间 仅音频存在
   }
 ```
@@ -229,12 +230,13 @@ methods: {
 
 <font color=#2d8cf0>单独气泡重写插槽</font>
 
-| 插槽名称 | 说明         |
-| -------- | ------------ |
-| message  | 文字消息插槽 |
-| image    | 图片消息插槽 |
-| audio    | 音频消息插槽 |
-| video    | 视频消息插槽 |
+| 插槽名称 | 说明                                  |
+| -------- | ------------------------------------- |
+| message  | 文字消息插槽                          |
+| image    | 图片消息插槽                          |
+| audio    | 音频消息插槽                          |
+| video    | 视频消息插槽                          |
+| topText  | 气泡上方文字(需数据结构中存在topText) |
 
 该条消息的数据均可通过
 
@@ -254,6 +256,9 @@ methods: {
 //video
 <template v-slot:voice="voice">
 	{{voice}}
+</template>
+<template v-slot:topText ="item">
+    {{item}}
 </template>
 ```
 
