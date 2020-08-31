@@ -303,7 +303,7 @@ import './node_modules/fonlineconsultation/packages/recorder.js';
 <font color=#2d8cf0>在需要的.vue中调用此方法并键入微信授权/下载素材的url</font>
 
 ```vue
-created(){
+mounted(){
    this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true);
 }
 ```
