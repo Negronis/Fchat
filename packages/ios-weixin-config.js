@@ -1,4 +1,4 @@
-(function () {
+(function () { 
    "use strict";
    window.RecordAppBaseFolder = window.PageSet_RecordAppBaseFolder || "/src/";
    console.log('支持文件加载')
@@ -24,8 +24,8 @@
       config.DownWxMedia = function (param, success, fail) {
          MyWxApi = window.PageSet_RecordAppWxApi;
          ajax(MyWxApi, {
-            action: "wxdown"
-            , mediaID: param.mediaId
+            action: "wxdown", 
+            content: param.mediaId
          }, function (data) {
             //   下载回调
             success(data);
@@ -33,7 +33,7 @@
             fail("下载音频失败：" + msg);
          });
       }; 
-      var ajax = function (url, data, True, False) {
+      var ajax = function (url, data, True, False) { 
          var xhr = new XMLHttpRequest();
          xhr.timeout = 20000;
          xhr.open("POST", url);
@@ -54,7 +54,7 @@
          var arr = [];
          for (var k in data) {
             arr.push(k + "=" + encodeURIComponent(data[k]));
-         };
+         }; 
          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
          xhr.send(arr.join("&"));
       }; 

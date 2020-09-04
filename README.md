@@ -304,9 +304,17 @@ import './node_modules/fonlineconsultation/packages/recorder.js';
 
 ```vue
 mounted(){
-   this.$FChat.openVoice("https://fepic.natapp4.cc/api/getSign", true);
+   this.$FChat.openVoice("微信授权地址", true);
 }
 ```
+
+注：IOS端的微信授权等方法皆可在
+
+```javascript
+/node_modules/fonlineconsultation/packages/ios-weixin-config.js
+```
+
+中进行配置修改，具体修改方法请见上方Recorder.js
 
 ------
 

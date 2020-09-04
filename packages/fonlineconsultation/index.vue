@@ -79,7 +79,7 @@
         </div>
       </slot> 
       <input type="file" id="sendImg" style="display:none">
-      <div class="voice-pop" v-if="startVoiceBoolean">
+      <div class="voice-pop"   v-if="startVoiceBoolean">
           <img v-if="voiceContent == '正在录音....'" src="https://p.pstatp.com/origin/13790000036267af24495" alt="" width="50px">
           <img v-if="voiceContent != '正在录音....'" src="https://p.pstatp.com/origin/ff92000312944dc6f369" width="50px" alt="">
           <div class="voice-pop-contant">{{voiceContent}}</div>

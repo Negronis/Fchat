@@ -264,12 +264,12 @@ class FChat {
              blob,  (window.URL || window.webkitURL).createObjectURL(blob),
              "时长:" + duration + "ms"
            );  
-           let fileBlob =  (window.URL || window.webkitURL).createObjectURL(blob);  
+            //   let fileBlob =  (window.URL || window.webkitURL).createObjectURL(blob);  
             // 暂停后发送至服务器，然后发出语音消息
             if(duration){
                duration = Math.ceil(duration / 1000);
             }  
-           var voiceObject = that.sendVoice(fileBlob,duration);
+           var voiceObject = that.sendVoice(blob,duration);
            resolve(voiceObject);
          },
          function (msg) {

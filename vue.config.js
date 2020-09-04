@@ -26,7 +26,8 @@ const devConfig = {
          filename: "index.html",
       },
    },
-   ...baseConfig
+   ...baseConfig,
+   devServer: {     disableHostCheck: true   } 
 }
 
 module.exports =  devConfig;
