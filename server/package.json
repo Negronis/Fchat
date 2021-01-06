@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "amrToMp3": "^1.0.8",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "circular-json": "^0.5.9",
     "connect-history-api-fallback": "^1.6.0",
